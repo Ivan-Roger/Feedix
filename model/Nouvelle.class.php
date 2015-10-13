@@ -3,10 +3,14 @@
   class Nouvelle {
     private $titre;
     private $date;
-    private $image;
+    private $imageID;
     private $link;
-    private $enclosures;
     private $content;
+
+    function __construct(DOMElement $item) {
+      $this->update($item);
+      $this->imageID=NULL;
+    }
 
     function titre() {
       return $this->titre;
@@ -36,13 +40,12 @@
 
       $nodeList = $item->getElementsByTagName('link');
       $this->link = $nodeList->item(0)->textContent;
+    }
 
-      /*
+    function downloadImage(DOMElement $item, $imageID) {
       $nodeList = $item->getElementsByTagName('enclosure');
-      for ($i=0; i<$nodeList->length; $i++) {
-        $this->enclosures[$i] = $nodeList->item($i)->textContent;
-      }
-      */
+      file_put_contents("../data/img/".$imageID,file_get_contents($nodeList->item(0)->attributes->getNamedItem('url')->value));
+      $this->imageID = $imageID;
     }
   }
 

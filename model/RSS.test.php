@@ -10,4 +10,5 @@
 
   // Affiche le titre
   echo $rss->titre()."\n";
+
 ?>

@@ -1,5 +1,7 @@
 <?php
 
+  require_once('Nouvelle.class.php');
+
   class RSS {
     private $url;
     private $titre;
@@ -39,6 +41,15 @@
 
       // Met à jour le titre dans l'objet
       $this->titre = $nodeList->item(0)->textContent;
+
+
+      $this->news=NULL;
+      $nodeList = $doc->getElementsByTagName('item');
+      for ($i=0; $i<$nodeList->length; $i++) {
+        $n = new Nouvelle($nodeList->item($i));
+        $n->downloadImage($nodeList->item($i),$imageID);
+        $this->news[] = $n;
+      }
     }
   }
 
