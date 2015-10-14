@@ -44,10 +44,11 @@
 
 
       $this->news=NULL;
+      $imageID=1;
       $nodeList = $doc->getElementsByTagName('item');
       for ($i=0; $i<$nodeList->length; $i++) {
         $n = new Nouvelle($nodeList->item($i));
-        $n->downloadImage($nodeList->item($i),$imageID);
+        $n->downloadImage($nodeList->item($i),$imageID++);
         $this->news[] = $n;
       }
     }

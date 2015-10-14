@@ -8,7 +8,11 @@
   // Charge le flux depuis le réseau
   $rss->update();
 
-  // Affiche le titre
-  echo $rss->titre()."\n";
-
+  // Affiche le titre et la description de toutes les nouvelles
+  foreach($rss->news() as $key => $nouvelle) {
+    echo '<div><h2>'.$nouvelle->titre().'</h2>';
+    echo '<i>'.$nouvelle->date()."</i><br/>";
+    echo '<img src="/~rogeri/M3104/Feedix/data/img/'.$nouvelle->imageURL().'" style="width: 250px;">';
+    echo '<p>'.$nouvelle->description()."</p></div><br/>";
+  }
 ?>
