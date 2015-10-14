@@ -7,6 +7,7 @@
     private $titre;
     private $date;
     private $news;
+    private $id;
 
     function __construct($url) {
       $this->url = $url;
@@ -27,6 +28,10 @@
 
     function news() {
       return $this->news;
+    }
+
+    function id() {
+      return $this->id;
     }
 
     function update() {
