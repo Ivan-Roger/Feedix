@@ -16,19 +16,34 @@
     // Methodes CRUD sur RSS
     //////////////////////////////////////////////////////////
 
+    // Lis $limit flux RSS a partir de $id
+    function readRSS($first,$limit) {
+      $sql = "Select * from RSS where id > ? limit ?";
+      $req = $this->db->prepare($sql);
+      $res = $req->execute(array($first,$limit));
+      if ($res === FALSE || $req->rowCount()<=0) {
+        die("getRSS error: no rss finded\n");
+      }
+      else {
+        return $req->fetchAll(PDO::FETCH_CLASS, "RSS");
+      }
+    }
+
     // Crée un nouveau flux à partir d'une URL
     // Si le flux existe déjà on ne le crée pas
     function createRSS($url) {
-      $rss = $this->readRSSfromURL($url);
+      $rss = $this->readRSSByURL($url);
       if ($rss == NULL) {
         try {
-          $q = "INSERT INTO RSS (url) VALUES ('?')";
+          $sql = "INSERT INTO RSS (url) VALUES ('?')";
           $req = $this->db->prepare($sql);
           $res = $req->execute(array($url));
-          if ($res === FALSE || $req->rowCount()>0) {
-            die("createRSS error: no rss inserted\n");
+          if ($res === FALSE || $req->rowCount()<=0) {
+            /*die*/echo("createRSS error: no rss inserted (".($res?'true':'false').")\n");
+            echo ("PDO error : ");
+            var_dump($this->db->errorInfo());
           }
-          return $this->readRSSfromURL($url);
+          return $this->readRSSByURL($url);
         } catch (PDOException $e) {
           die("PDO Error :".$e->getMessage());
         }
@@ -43,8 +58,8 @@
       $sql = "Select * from RSS where url = ?";
       $req = $this->db->prepare($sql);
       $res = $req->execute(array($url));
-      if ($res === FALSE || $req->rowCount()>0) {
-        die("getRSSByURL error: no rss finded\n");
+      if ($res === FALSE || $req->rowCount()<=0) {
+        /*die*/echo("getRSSByURL error: no rss finded\n");
       }
       else {
         return $req->fetchAll(PDO::FETCH_CLASS, "RSS")[0];
@@ -56,7 +71,7 @@
       $sql = "Select * from RSS where id = ?";
       $req = $this->db->prepare($sql);
       $res = $req->execute(array($id));
-      if ($res === FALSE) {
+      if ($res === FALSE || $req->rowCount()<=0) {
         die("getRSSByURL error: no rss finded\n");
       }
       else {
@@ -72,7 +87,7 @@
         $sql = "UPDATE RSS SET titre=?, date='?' WHERE url='?'";
         $req = $this->db->prepare($sql);
         $res = $req->execute(array($titre,$rss->date(),$rss->url()));
-        if ($res === FALSE) {
+        if ($res === FALSE || $req->rowCount()<=0) {
           die("updateRSS error: no rss updated\n");
         }
       } catch (PDOException $e) {
@@ -89,7 +104,7 @@
       $sql = "Select * from RSS where titre = ? and idRSS = ?";
       $req = $this->db->prepare($sql);
       $res = $req->execute(array($titre,$RSS_id));
-      if ($req === FALSE) {
+      if ($req === FALSE || $req->rowCount()<=0) {
         die("getNouvelleByTitle error: no nouvelle inserted\n");
       }
       else {
@@ -102,7 +117,7 @@
       $sql = "Select * from RSS where id = ? and idRSS = ?";
       $req = $this->db->prepare($sql);
       $res = $req->execute(array($id,$RSS_id));
-      if ($req === FALSE) {
+      if ($req === FALSE || $req->rowCount()<=0) {
         die("getNouvelleByID error: no nouvelle inserted\n");
       }
       else {
@@ -116,7 +131,7 @@
       $sql = "INSERT INTO Nouvelle (idRSS, date, titre, description, url, image) values ('?','?', '?', '?', '?', '?')";
       $req = $this->db->prepare($sql);
       $res = $req->execute(array($RSS_id,$n->date(),$n->titre(),$n->content(),$n->link(),$n->imageID()));
-      if ($res === FALSE) {
+      if ($res === FALSE || $req->rowCount()<=0) {
         die("createNouvelle error: no nouvelle finded\n");
       }
     }
@@ -128,7 +143,7 @@
         $sql = "UPDATE RSS SET image=? WHERE id='?'";
         $req = $this->db->prepare($sql);
         $res = $req->execute(array($img,$n->id()));
-        if ($res === FALSE) {
+        if ($res === FALSE || $req->rowCount()<=0) {
           die("updateImageNouvelle error: no nouvelle updated\n");
         }
       } catch (PDOException $e) {

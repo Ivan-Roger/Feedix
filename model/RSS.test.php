@@ -1,4 +1,4 @@
-<?php
+<pre><?php
   // Test de la classe RSS
   require_once('RSS.class.php');
 
@@ -25,14 +25,13 @@
   // Test si l'URL existe dans la BD
   $url = 'http://www.lemonde.fr/m-actu/rss_full.xml';
 
-  $rss = $dao->getRSSByURL($url);
+  $rss = $dao->readRSSByURL($url);
   if ($rss == NULL) {
     echo $url." n'est pas connu\n";
     echo "On l'ajoute ... \n";
     $rss = $dao->createRSS($url);
-
   }
 
   // Mise à jour du flux
   $rss->update();
-?>
+?></pre>
