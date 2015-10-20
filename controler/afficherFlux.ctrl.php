@@ -1,5 +1,6 @@
 <?php
-//nothing yet
-$domDoc = new DOMDocument;
-$domDoc->load("http://www.lemonde.fr/m-actu/rss_full.xml");
+  require_once("../model/DAO.class.php");
+
+  $dao = new DAO("../data/db/rss.db");
+
 ?>

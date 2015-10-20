@@ -39,7 +39,7 @@
     }
 
     // Acces à un objet RSS à partir de son URL
-    function getRSSByURL($url) {
+    function readRSSByURL($url) {
       $sql = "Select * from RSS where url = ?";
       $req = $this->db->prepare($sql);
       $res = $req->execute(array($url));
@@ -52,7 +52,7 @@
     }
 
     // Acces à un objet RSS à partir de son ID
-    function getRSSByID($id) {
+    function readRSSByID($id) {
       $sql = "Select * from RSS where id = ?";
       $req = $this->db->prepare($sql);
       $res = $req->execute(array($id));
@@ -85,7 +85,7 @@
     //////////////////////////////////////////////////////////
 
     // Acces à une nouvelle à partir de son titre et l'ID du flux
-    function getNouvelleByTitle($titre,$RSS_id) {
+    function readNouvelleByTitle($titre,$RSS_id) {
       $sql = "Select * from RSS where titre = ? and idRSS = ?";
       $req = $this->db->prepare($sql);
       $res = $req->execute(array($titre,$RSS_id));
@@ -98,7 +98,7 @@
     }
 
     // Acces à une nouvelle à partir de son ID et l'ID du flux
-    function getNouvelleByID($id,$RSS_id) {
+    function readNouvelleByID($id,$RSS_id) {
       $sql = "Select * from RSS where id = ? and idRSS = ?";
       $req = $this->db->prepare($sql);
       $res = $req->execute(array($id,$RSS_id));
