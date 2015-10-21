@@ -44,7 +44,7 @@
 
     function downloadImage(DOMElement $item, $imageID) {
       $nodeList = $item->getElementsByTagName('enclosure');
-      if ($nodeList->length) {
+      if ($nodeList->length>0) {
         $url = $nodeList->item(0)->attributes->getNamedItem('url')->value;
         $filepath = "../data/img/".$imageID.".".pathinfo($url)['extension'];
         //echo "DEBUG : Saving $url in $filepath<br/>";

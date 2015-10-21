@@ -28,7 +28,7 @@
         die("getRSS error: no rss finded\n");
       }
       else {
-        return $req->fetchAll(PDO::FETCH_CLASS, "RSS");
+        return $req->fetchAll(PDO::FETCH_CLASS, "RSS", array());
       }
     }
 
@@ -64,7 +64,7 @@
         die("getRSSByURL error: no rss finded (".($res?'true':'false').")\n");
       }
       else {
-        return $req->fetchAll(PDO::FETCH_CLASS, "RSS")[0];
+        return $req->fetchAll(PDO::FETCH_CLASS, "RSS", array($url))[0];
       }
     }
 
