@@ -14,6 +14,7 @@
         <article>
           <h2><?php echo($flux["title"]); ?></h2>
           <i><a href="<?php echo($flux['url']); ?>"><?php echo($flux['url']); ?></a></i>
+          <b><a href="afficherNouvelles.ctrl.php?rss=<?php echo($flux['id']); ?>&titre=<?php echo($flux['title']); ?>">Lire ...</a></b>
         </article>
       <?php}?>
     </section>

@@ -1,4 +1,7 @@
 <?php
+  require_once("RSS.class.php");
+  require_once("Nouvelle.class.php");
+
   class DAO {
     private $db; // L'objet de la base de donnée
 
@@ -21,7 +24,7 @@
       $sql = "Select * from RSS where id > ? limit ?";
       $req = $this->db->prepare($sql);
       $res = $req->execute(array($first,$limit));
-      if ($res === FALSE || $req->rowCount()<=0) {
+      if ($res === FALSE) {
         die("getRSS error: no rss finded\n");
       }
       else {
@@ -35,13 +38,12 @@
       $rss = $this->readRSSByURL($url);
       if ($rss == NULL) {
         try {
-          $sql = "INSERT INTO RSS (url) VALUES ('?')";
+          $sql = "INSERT INTO RSS (url) VALUES (?)";
           $req = $this->db->prepare($sql);
-          $res = $req->execute(array($url));
+          $res = $req->execute(array($this->db->quote($url)));
           if ($res === FALSE || $req->rowCount()<=0) {
-            /*die*/echo("createRSS error: no rss inserted (".($res?'true':'false').")\n");
-            echo ("PDO error : ");
-            var_dump($this->db->errorInfo());
+            echo ("PDO error : ".($this->db->errorInfo()[2])."\n");
+            die("createRSS error: no rss inserted (".($res?'true':'false').")\n");
           }
           return $this->readRSSByURL($url);
         } catch (PDOException $e) {
@@ -58,8 +60,8 @@
       $sql = "Select * from RSS where url = ?";
       $req = $this->db->prepare($sql);
       $res = $req->execute(array($url));
-      if ($res === FALSE || $req->rowCount()<=0) {
-        /*die*/echo("getRSSByURL error: no rss finded\n");
+      if ($res === FALSE) {
+        die("getRSSByURL error: no rss finded (".($res?'true':'false').")\n");
       }
       else {
         return $req->fetchAll(PDO::FETCH_CLASS, "RSS")[0];
@@ -71,7 +73,7 @@
       $sql = "Select * from RSS where id = ?";
       $req = $this->db->prepare($sql);
       $res = $req->execute(array($id));
-      if ($res === FALSE || $req->rowCount()<=0) {
+      if ($res === FALSE) {
         die("getRSSByURL error: no rss finded\n");
       }
       else {
@@ -104,7 +106,7 @@
       $sql = "Select * from RSS where titre = ? and idRSS = ?";
       $req = $this->db->prepare($sql);
       $res = $req->execute(array($titre,$RSS_id));
-      if ($req === FALSE || $req->rowCount()<=0) {
+      if ($req === FALSE) {
         die("getNouvelleByTitle error: no nouvelle inserted\n");
       }
       else {
@@ -117,7 +119,7 @@
       $sql = "Select * from RSS where id = ? and idRSS = ?";
       $req = $this->db->prepare($sql);
       $res = $req->execute(array($id,$RSS_id));
-      if ($req === FALSE || $req->rowCount()<=0) {
+      if ($req === FALSE) {
         die("getNouvelleByID error: no nouvelle inserted\n");
       }
       else {

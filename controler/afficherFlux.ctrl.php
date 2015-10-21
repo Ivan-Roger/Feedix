@@ -4,6 +4,7 @@
   $dao = new DAO("../data/db/rss.db");
 
   foreach($dao->readRSS(0,20) as $rss) {
+    $info['id'] = $rss->id();
     $info['title'] = $rss->titre();
     $info['url'] = $rss->url();
     $data['flux'][] = $info;

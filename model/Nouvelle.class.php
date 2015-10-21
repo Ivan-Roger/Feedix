@@ -44,12 +44,14 @@
 
     function downloadImage(DOMElement $item, $imageID) {
       $nodeList = $item->getElementsByTagName('enclosure');
-      $url = $nodeList->item(0)->attributes->getNamedItem('url')->value;
-      $filepath = "../data/img/".$imageID.".".pathinfo($url)['extension'];
-      //echo "DEBUG : Saving $url in $filepath<br/>";
-      $img = file_get_contents($url);
-      file_put_contents($filepath,$img);
-      $this->imageID = $imageID.".".pathinfo($url)['extension'];;
+      if ($nodeList->length) {
+        $url = $nodeList->item(0)->attributes->getNamedItem('url')->value;
+        $filepath = "../data/img/".$imageID.".".pathinfo($url)['extension'];
+        //echo "DEBUG : Saving $url in $filepath<br/>";
+        $img = file_get_contents($url);
+        file_put_contents($filepath,$img);
+        $this->imageID = $imageID.".".pathinfo($url)['extension'];;
+      }
     }
   }
 
