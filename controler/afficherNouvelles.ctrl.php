@@ -11,6 +11,7 @@
       $dao->updateRSS($rss);
       $news = $rss->news();
       foreach ($news as $nouv) {
+        var_dump($nouv);
         $dao->createNouvelle($nouv);
       }
     } else {

@@ -5,12 +5,12 @@
     private $idRSS;
     private $titre;
     private $date;
-    private $image;
+    private $imageID;
     private $url;
     private $description;
 
     function __construct($id=null,$idRSS, DOMElement $item=null) {
-      $this->image=null;
+      $this->imageID=null;
       $this->idRSS=$idRSS;
       if ($item!=null)
         $this->update($item);
