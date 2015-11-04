@@ -18,14 +18,18 @@
     }
     $data['news'] = array();
     $data[0] = 1;
-    foreach ($news as $nouv) {
-      //$dao->createNouvelle($nouv,$_GET['rss']);
-      var_dump($nouv);
-      $n['title'] = $nouv->titre();
-      $n['date'] = $nouv->date();
-      $n['img'] = $nouv->imageURL();
-      $n['desc'] = $nouv->description();
-      $data['news'][]=$n;
+    if ($news!=null) {
+      foreach ($news as $nouv) {
+        //$dao->createNouvelle($nouv,$_GET['rss']);
+        var_dump($nouv);
+        $n['title'] = $nouv->titre();
+        $n['date'] = $nouv->date();
+        $n['img'] = $nouv->imageURL();
+        $n['desc'] = $nouv->description();
+        $data['news'][]=$n;
+      }
+    } else {
+      echo("--- Debug: Pas de nouvelles\n");
     }
     echo("</pre>");
     include("../view/Nouvelles.view.php");

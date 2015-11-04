@@ -11,10 +11,11 @@
 
     function __construct($id=null,$idRSS, DOMElement $item=null) {
       $this->image=null;
-      if ($item!=null) {
-        $this->id=$id;
+      $this->idRSS=$idRSS;
+      if ($item!=null)
         $this->update($item);
-      }
+      if ($id!=null)
+        $this->id=$id;
     }
 
     function id() {
@@ -53,10 +54,10 @@
       $this->date = $nodeList->item(0)->textContent;
 
       $nodeList = $item->getElementsByTagName('description');
-      $this->content = $nodeList->item(0)->textContent;
+      $this->description = $nodeList->item(0)->textContent;
 
       $nodeList = $item->getElementsByTagName('link');
-      $this->link = $nodeList->item(0)->textContent;
+      $this->url = $nodeList->item(0)->textContent;
     }
 
     function downloadImage(DOMElement $item, $imageID) {
