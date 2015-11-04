@@ -9,7 +9,7 @@
     private $url;
     private $description;
 
-    function __construct($id=null,$idRSS, DOMElement $item=null) {
+    function __construct($idRSS,$id=null,DOMElement $item=null) {
       $this->imageID=null;
       $this->idRSS=$idRSS;
       if ($item!=null)

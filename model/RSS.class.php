@@ -54,7 +54,7 @@
       $idNouv=1;
       $nodeList = $doc->getElementsByTagName('item');
       for ($i=0; $i<$nodeList->length; $i++) {
-        $n = new Nouvelle($idNouv,$this->id,$nodeList->item($i));
+        $n = new Nouvelle($this->id,$idNouv,$nodeList->item($i));
         $n->downloadImage($nodeList->item($i),$this->id."_".$idNouv++);
         $this->news[] = $n;
       }
