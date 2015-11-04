@@ -35,7 +35,7 @@
     }
 
     function imageURL() {
-      return $this->image;
+      return $this->imageID;
     }
 
     function URL() {
