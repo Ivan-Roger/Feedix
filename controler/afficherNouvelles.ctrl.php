@@ -6,6 +6,7 @@
   if (isset($_GET['rss']) && $_GET['rss']!=null) {
     $dao = new DAO("../data/db/rss.db");
     $rss = $dao->readRSSByID($_GET['rss']);
+    $news=null;
     if (isset($_GET['update']) && $_GET['update']==1) {
       $rss->update();
       $dao->updateRSS($rss);

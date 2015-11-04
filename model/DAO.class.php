@@ -124,7 +124,7 @@
     function readNouvelles($first,$RSS_id,$limit) {
       $sql = "SELECT * FROM Nouvelle WHERE id > ? AND idRSS = ? ORDER BY idRSS, id LIMIT ?";
       $req = $this->db->prepare($sql);
-      $params = array($first,$rssID,$limit);
+      $params = array($first,$RSS_id,$limit);
       $res = $req->execute($params);
       debug($this->db,$sql,$params);
       if ($res === FALSE) {
