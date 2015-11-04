@@ -3,21 +3,24 @@
   <head>
     <meta charset="utf-8"/>
     <title>Feedix - Nouvelles</title>
+    <link rel="stylesheet" href="../view/style.css"/>
   </head>
   <body>
     <header>
       <h1>Feedix - Nouvelles</h1>
-      <?php include("nav.php") ?>
     </header>
     <section>
+    <a href="..">Home</a><br/>
       <?php foreach ($data["news"] as $nouvelle) {?>
         <article>
-          <h2><?php echo($nouvelle["title"]); ?></h2>
-          <i><?php echo($nouvelle['date']); ?></i>
-          <img alt="Image" src="<?php echo($nouvelle['img']); ?>"/>
-          <p><?php echo($nouvelle['desc']); ?></p>
+          <div class="pic">
+            <img alt="Image" src="../data/img/<?= ($nouvelle['img']!=null?$nouvelle['img']:"default.jpeg") ?>"/>
+          </div>
+          <h2><?= $nouvelle['title']?></h2>
+          <i><?= $nouvelle['date'] ?></i><br>
+          <p><?= $nouvelle['desc'] ?></p>
         </article>
-      <?php}?>
+      <?php } ?>
     </section>
     <footer>
       <hr/>

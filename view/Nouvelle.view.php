@@ -7,7 +7,6 @@
   <body>
     <header>
       <h1>Feedix - Nouvelle</h1>
-      <?php include("nav.php") ?>
     </header>
     <section>
       <h2><?php echo($data["title"]); ?></h2>

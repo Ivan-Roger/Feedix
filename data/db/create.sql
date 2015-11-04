@@ -6,14 +6,15 @@ CREATE TABLE RSS (
 );
 
 CREATE TABLE Nouvelle (
-  id integer PRIMARY KEY AUTOINCREMENT,
-  idRSS int,
+  id integer,
+  idRSS integer,
   date timestamp,
   titre varchar(255),
   description varchar(255),
   url varchar(255),
   image varchar(80),
-  FOREIGN KEY (idRSS) REFERENCES RSS(id)
+  FOREIGN KEY (idRSS) REFERENCES RSS(id),
+  PRIMARY KEY (id,idRSS)
 );
 
 CREATE TABLE Utilisateur(

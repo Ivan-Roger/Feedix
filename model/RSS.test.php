@@ -1,4 +1,5 @@
 <pre><?php
+/*
   // Test de la classe RSS
   require_once('RSS.class.php');
 
@@ -34,4 +35,13 @@
 
   // Mise à jour du flux
   $rss->update();
+  */
+
+  require_once('DAO.class.php');
+  $dao = new DAO("../data/db/rss.db");
+
+  $rss = $dao->readRSSByID(0);
+  $rss->update();
+
+  
 ?></pre>

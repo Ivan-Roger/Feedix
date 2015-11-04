@@ -7,16 +7,15 @@
   <body>
     <header>
       <h1>Feedix - Flux</h1>
-      <?php include("nav.php") ?>
     </header>
     <section>
       <?php foreach ($data["flux"] as $flux) {?>
         <article>
-          <h2><?php echo($flux["title"]); ?></h2>
-          <i><a href="<?php echo($flux['url']); ?>"><?php echo($flux['url']); ?></a></i>
-          <b><a href="afficherNouvelles.ctrl.php?rss=<?php echo($flux['id']); ?>&titre=<?php echo($flux['title']); ?>">Lire ...</a></b>
+          <h2>#<?= $flux['id'] ?> : <?= $flux["titre"] ?></h2>
+          <i><a href="<?= $flux['url'] ?>"><?= $flux['url'] ?></a></i>
+          <b><a href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>">Lire ...</a> / <a href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>&update=1">Mettre à jour.</a></b>
         </article>
-      <?php}?>
+      <?php } ?>
     </section>
     <footer>
       <hr/>

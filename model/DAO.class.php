@@ -2,6 +2,20 @@
   require_once("RSS.class.php");
   require_once("Nouvelle.class.php");
 
+  function debug($db,$sql,$params) {
+    echo "Requête : ".$sql."\n";
+    echo "Paramétres : ";
+    foreach ($params as $p) {
+      echo $p."\t";
+    }
+    echo "\n";
+    if ($db->errorInfo()[1]!=null) {
+      echo "DB error : ".$db->errorInfo()[2]."\n";
+    } else {
+      echo "Success !\n";
+    }
+  }
+
   class DAO {
     private $db; // L'objet de la base de donnée
 
@@ -10,7 +24,7 @@
       $dsn = 'sqlite:'.$dbPath; // Data source name
       try {
         $this->db = new PDO($dsn);
-      } catch (PDOException $e) {
+      } catch (PDOExcetion $e) {
         exit("Erreur ouverture BD : ".$e->getMessage());
       }
     }
@@ -28,7 +42,7 @@
         die("getRSS error: no rss finded\n");
       }
       else {
-        return $req->fetchAll(PDO::FETCH_CLASS, "RSS", array());
+        return $req->fetchAll(PDO::FETCH_CLASS, "RSS");
       }
     }
 
@@ -40,9 +54,9 @@
         try {
           $sql = "INSERT INTO RSS (url) VALUES (?)";
           $req = $this->db->prepare($sql);
-          $res = $req->execute(array($this->db->quote($url)));
-          if ($res === FALSE || $req->rowCount()<=0) {
-            echo ("PDO error : ".($this->db->errorInfo()[2])."\n");
+          $res = $req->execute(array($url));
+          if ($res === FALSE) {
+            debug($this->db,$sql);
             die("createRSS error: no rss inserted (".($res?'true':'false').")\n");
           }
           return $this->readRSSByURL($url);
@@ -85,12 +99,17 @@
     function updateRSS(RSS $rss) {
       // Met à jour uniquement le titre et la date
       try {
-        $titre = $this->db->quote($rss->titre());
-        $sql = "UPDATE RSS SET titre=?, date='?' WHERE url='?'";
+        $sql = "UPDATE RSS SET titre=?, date=? WHERE url=?";
         $req = $this->db->prepare($sql);
-        $res = $req->execute(array($titre,$rss->date(),$rss->url()));
-        if ($res === FALSE || $req->rowCount()<=0) {
-          die("updateRSS error: no rss updated\n");
+        $params=array(
+          $this->db->quote($rss->titre()),
+          $this->db->quote($rss->date()),
+          $this->db->quote($rss->url())
+        );
+        $res = $req->execute($params);
+        debug($this->db,$sql,$params);
+        if ($res === FALSE) {
+          echo("updateRSS error: no rss updated\n");
         }
       } catch (PDOException $e) {
         die("PDO Error :".$e->getMessage());
@@ -101,22 +120,40 @@
     // Methodes CRUD sur Nouvelle
     //////////////////////////////////////////////////////////
 
+    // Lis $limit flux Nouvelles a partir de $id
+    function readNouvelles($first,$rssID,$limit) {
+      $sql = "SELECT * FROM Nouvelle WHERE id > ? AND idRSS = ? ORDER BY idRSS, id LIMIT ?";
+      $req = $this->db->prepare($sql);
+      $params = array($first,$rssID,$limit);
+      $res = $req->execute($params);
+      debug($this->db,$sql,$params);
+      if ($res === FALSE) {
+        die("readNouvelle error: no Nouvelle finded\n");
+      }
+      else {
+        return $req->fetchAll(PDO::FETCH_CLASS, "Nouvelle");
+      }
+    }
+
     // Acces à une nouvelle à partir de son titre et l'ID du flux
     function readNouvelleByTitle($titre,$RSS_id) {
-      $sql = "Select * from RSS where titre = ? and idRSS = ?";
+      $sql = "Select * from RSS where titre = ? and id = ?";
       $req = $this->db->prepare($sql);
       $res = $req->execute(array($titre,$RSS_id));
       if ($req === FALSE) {
         die("getNouvelleByTitle error: no nouvelle inserted\n");
       }
       else {
-        return $req->fetchAll(PDO::FETCH_CLASS, "Nouvelle")[0];
+        $rows = $req->fetchAll(PDO::FETCH_CLASS, "Nouvelle");
+        if (count($rows)>0) {
+          return $rows[0];
+        }
       }
     }
 
     // Acces à une nouvelle à partir de son ID et l'ID du flux
     function readNouvelleByID($id,$RSS_id) {
-      $sql = "Select * from RSS where id = ? and idRSS = ?";
+      $sql = "Select * from RSS where id = ? and id = ?";
       $req = $this->db->prepare($sql);
       $res = $req->execute(array($id,$RSS_id));
       if ($req === FALSE) {
@@ -129,11 +166,20 @@
 
     // Crée une nouvelle dans la base à partir d'un objet nouvelle
     // et de l'id du flux auquelle elle appartient
-    function createNouvelle(Nouvelle $n, $RSS_id) {
-      $sql = "INSERT INTO Nouvelle (idRSS, date, titre, description, url, image) values ('?','?', '?', '?', '?', '?')";
+    function createNouvelle(Nouvelle $n) {
+      $sql = "INSERT INTO Nouvelle (id, idRSS, `date`, titre, description, image) values (?,?,?, ?, ?, ?)";
       $req = $this->db->prepare($sql);
-      $res = $req->execute(array($RSS_id,$n->date(),$n->titre(),$n->content(),$n->link(),$n->imageID()));
-      if ($res === FALSE || $req->rowCount()<=0) {
+      $params = array(
+        $n->id(),
+        $n->idRSS(),
+        $n->date(),
+        $n->titre(),
+        $n->description(),
+        $n->imageURL()
+      );
+      $res = $req->execute($params);
+      debug($this->db,$sql,$params);
+      if ($res === FALSE) {
         die("createNouvelle error: no nouvelle finded\n");
       }
     }
@@ -145,7 +191,7 @@
         $sql = "UPDATE RSS SET image=? WHERE id='?'";
         $req = $this->db->prepare($sql);
         $res = $req->execute(array($img,$n->id()));
-        if ($res === FALSE || $req->rowCount()<=0) {
+        if ($res === FALSE) {
           die("updateImageNouvelle error: no nouvelle updated\n");
         }
       } catch (PDOException $e) {
@@ -153,4 +199,7 @@
       }
     }
   }
+
+
+  //echo("Error DB : ".$this->db->errorInfo()[2]);
 ?>

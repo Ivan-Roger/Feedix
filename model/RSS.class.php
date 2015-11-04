@@ -9,9 +9,12 @@
     private $news;
     private $id;
 
-    function __construct($url) {
-      $this->url = $url;
-      $this->update();
+    function __construct($url="") {
+      if ($url!="") {
+          $this->url = $url;
+          $this->update();
+      }
+      //$this->update();
     }
 
     function url() {
@@ -47,13 +50,12 @@
       // Met à jour le titre dans l'objet
       $this->titre = $nodeList->item(0)->textContent;
 
-
       $this->news=NULL;
-      $imageID=1;
+      $idNouv=1;
       $nodeList = $doc->getElementsByTagName('item');
       for ($i=0; $i<$nodeList->length; $i++) {
-        $n = new Nouvelle($nodeList->item($i));
-        $n->downloadImage($nodeList->item($i),$imageID++);
+        $n = new Nouvelle($idNouv,$this->id,$nodeList->item($i));
+        $n->downloadImage($nodeList->item($i),$this->id."_".$idNouv++);
         $this->news[] = $n;
       }
     }

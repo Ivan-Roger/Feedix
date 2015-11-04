@@ -1,15 +1,28 @@
 <?php
 
   class Nouvelle {
+    private $id;
+    private $idRSS;
     private $titre;
     private $date;
-    private $imageID;
-    private $link;
-    private $content;
+    private $image;
+    private $url;
+    private $description;
 
-    function __construct(DOMElement $item) {
-      $this->update($item);
-      $this->imageID=NULL;
+    function __construct($id=null,$idRSS, DOMElement $item=null) {
+      $this->image=null;
+      if ($item!=null) {
+        $this->id=$id;
+        $this->update($item);
+      }
+    }
+
+    function id() {
+      return $this->id;
+    }
+
+    function idRSS() {
+      return $this->idRSS;
     }
 
     function titre() {
@@ -21,11 +34,15 @@
     }
 
     function imageURL() {
-      return $this->imageID;
+      return $this->image;
+    }
+
+    function URL() {
+      return $this->url;
     }
 
     function description() {
-      return $this->content;
+      return $this->description;
     }
 
     function update(DOMElement $item) {
@@ -46,11 +63,15 @@
       $nodeList = $item->getElementsByTagName('enclosure');
       if ($nodeList->length>0) {
         $url = $nodeList->item(0)->attributes->getNamedItem('url')->value;
-        $filepath = "../data/img/".$imageID.".".pathinfo($url)['extension'];
-        //echo "DEBUG : Saving $url in $filepath<br/>";
-        $img = file_get_contents($url);
-        file_put_contents($filepath,$img);
-        $this->imageID = $imageID.".".pathinfo($url)['extension'];;
+        $pathParts = pathinfo(parse_url($url, PHP_URL_PATH));
+        $ext = ((isset($pathParts['extension']) && $pathParts['extension']!=null)?$pathParts['extension']:null);
+        if ($ext!=null) {
+          $filepath = "../data/img/".$imageID.".".$ext;
+          //echo "DEBUG : Saving $url in $filepath<br/>";
+          $img = file_get_contents($url);
+          file_put_contents($filepath,$img);
+          $this->imageID = $imageID.".".$ext;
+        }
       }
     }
   }

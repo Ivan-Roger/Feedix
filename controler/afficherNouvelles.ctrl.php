@@ -1,16 +1,34 @@
-<?php
+<pre><?php
+  require_once("../model/DAO.class.php");
+  require_once("../model/RSS.class.php");
   require_once("../model/Nouvelle.class.php");
 
-  if (isset($_GET['rss']) && isset($_GET['titre'])) {
+  if (isset($_GET['rss']) && $_GET['rss']!=null) {
     $dao = new DAO("../data/db/rss.db");
-    $nouv = $dao->readNouvellefromTitre($_GET['titre'],$_GET['rss']);
-
-    $data['title'] = $nouv->titre();
-    $data['date'] = $nouv->date();
-    $data['img'] = $nouv->imageURL();
-    $data['desc'] = $nouv->description();
-
-    include("../view/Nouvelle.view.php");
+    $rss = $dao->readRSSByID($_GET['rss']);
+    if (isset($_GET['update']) && $_GET['update']==1) {
+      $rss->update();
+      $dao->updateRSS($rss);
+      $news = $rss->news();
+      foreach ($news as $nouv) {
+        $dao->createNouvelle($nouv);
+      }
+    } else {
+      $dao->readNouvelles(0,$_GET['rss'],20);
+    }
+    $data['news'] = array();
+    $data[0] = 1;
+    foreach ($news as $nouv) {
+      //$dao->createNouvelle($nouv,$_GET['rss']);
+      var_dump($nouv);
+      $n['title'] = $nouv->titre();
+      $n['date'] = $nouv->date();
+      $n['img'] = $nouv->imageURL();
+      $n['desc'] = $nouv->description();
+      $data['news'][]=$n;
+    }
+    echo("</pre>");
+    include("../view/Nouvelles.view.php");
   } else {
     header("Location:"."..");
   }
