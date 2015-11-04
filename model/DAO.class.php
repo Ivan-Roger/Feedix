@@ -121,7 +121,7 @@
     //////////////////////////////////////////////////////////
 
     // Lis $limit flux Nouvelles a partir de $id
-    function readNouvelles($first,$rssID,$limit) {
+    function readNouvelles($first,$RSS_id,$limit) {
       $sql = "SELECT * FROM Nouvelle WHERE id > ? AND idRSS = ? ORDER BY idRSS, id LIMIT ?";
       $req = $this->db->prepare($sql);
       $params = array($first,$rssID,$limit);
@@ -131,7 +131,7 @@
         die("readNouvelle error: no Nouvelle finded\n");
       }
       else {
-        return $req->fetchAll(PDO::FETCH_CLASS, "Nouvelle");
+        return $req->fetchAll(PDO::FETCH_CLASS, "Nouvelle",array($RSS_id));
       }
     }
 
@@ -144,7 +144,7 @@
         die("getNouvelleByTitle error: no nouvelle inserted\n");
       }
       else {
-        $rows = $req->fetchAll(PDO::FETCH_CLASS, "Nouvelle");
+        $rows = $req->fetchAll(PDO::FETCH_CLASS, "Nouvelle",array($RSS_id));
         if (count($rows)>0) {
           return $rows[0];
         }
@@ -160,7 +160,7 @@
         die("getNouvelleByID error: no nouvelle inserted\n");
       }
       else {
-        return $req->fetchAll(PDO::FETCH_CLASS, "Nouvelle")[0];
+        return $req->fetchAll(PDO::FETCH_CLASS, "Nouvelle",array($RSS_id))[0];
       }
     }
 
