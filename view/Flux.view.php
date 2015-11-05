@@ -1,3 +1,4 @@
+<?php if(!isset($data)) { header("Location".".."); } ?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -46,23 +47,22 @@
             <?php } ?>
           </div>
         </nav>
-
     </header>
     <?php if (isset($data['user'])) { ?>
     <section class="col-lg-12">
       <h2>Abonnements</h2>
       <?php if (count($data["followedRSS"])>0) { foreach ($data["followedRSS"] as $flux) { ?>
         <article class="col-lg-6">
-          <h3><?= $flux["titre"] ?></h2>
+          <h3><?= $flux["titre"] ?></h3>
           <i class="col-lg-12"><a href="<?= $flux['url'] ?>"><?= $flux['url'] ?></a></i><br/>
           <div class="col-lg-5 col-lg-offset-2"><div class="text-right">
             <a class="btn btn-info" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>">Lire ...</a>
             <a class="btn btn-warning" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>&update=1">Mettre à jour</a>
-            <a class="btn btn-danger" href="afficherFlux.ctrl.php?action=unfollow&rss=<?= $flux['id'] ?>">Ne plus suivre</a>
+            <a class="btn btn-danger" href="sAbonner.ctrl.php?action=unfollow&rss=<?= $flux['id'] ?>">Se désabonner</a>
           </div></div>
         </article>
       <?php } } else { ?>
-        <p>Vous n'êtes abonné à aucun flux</p>
+        <p>Vous n'êtes abonné à aucun flux.</p>
       <?php } ?>
     </section>
     <?php } ?>
@@ -72,17 +72,21 @@
       <?php } ?>
       <?php foreach ($data["defaultRSS"] as $flux) {?>
         <article class="col-lg-6">
-          <h3><?= $flux["titre"] ?></h2>
+          <h3><?= $flux["titre"] ?></h3>
           <i class="col-lg-12"><a href="<?= $flux['url'] ?>"><?= $flux['url'] ?></a></i>
           <div class="col-lg-5 col-lg-offset-2"><div class="text-right">
             <a class="btn btn-info" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>">Lire ...</a>
             <a class="btn btn-warning" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>&update=1">Mettre à jour</a>
+            <?php if (isset($data['user'])) { ?>
+            <a class="btn btn-success" href="sAbonner.ctrl.php?action=follow&rss=<?= $flux['id'] ?>">S'abonner</a>
+            <?php } ?>
           </b>
         </article>
       <?php } ?>
     </section>
     <?php if (isset($data['user'])) { ?>
       <section class="col-lg-12">
+        <?php if(isset($data['info'])) echo("<p class='alert alert-success'>".$data['info']."</p>\n"); ?>
         <form class="col-lg-6" action="afficherFlux.ctrl.php" method="POST">
           <fieldset>
             <legend>Ajouter un flux</legend>
@@ -93,7 +97,7 @@
         </form>
         <fieldset class="col-lg-6">
           <legend>S'abonner</legend>
-          <button class="btn btn-info">Chercher un flux</button>
+          <a class="btn btn-info" href="sAbonner.ctrl.php">Chercher un flux</a>
         </fieldset>
       </section>
     <?php } ?>

@@ -7,10 +7,11 @@
   function debug($db,$sql,$params) {
     global $DEBUG;
     if ($DEBUG) {
+      echo("<pre>\n");
       echo "Requête : ".$sql."\n";
       echo "Paramétres : ";
       foreach ($params as $p) {
-        echo $p."\t";
+        var_dump($p);
       }
       echo "\n";
       if ($db->errorInfo()[1]!=null) {
@@ -18,6 +19,7 @@
       } else {
         echo "Success !\n";
       }
+      echo("</pre>\n");
     }
   }
 
@@ -40,7 +42,7 @@
 
     // Lis $limit flux RSS a partir de $id
     function readRSS($first,$limit) {
-      $sql = "Select * from RSS where id > ? limit ?";
+      $sql = "Select * from RSS where id >= ? limit ?";
       $req = $this->db->prepare($sql);
       $res = $req->execute(array($first,$limit));
       if ($res === FALSE) {
@@ -53,7 +55,7 @@
 
     // Crée un nouveau flux à partir d'une URL
     // Si le flux existe déjà on ne le crée pas
-    function createRSS($url) {
+    function createRSS($url, $login=null) {
       $rss = $this->readRSSByURL($url);
       if ($rss == NULL) {
         try {
@@ -68,6 +70,8 @@
         } catch (PDOException $e) {
           die("PDO Error :".$e->getMessage());
         }
+        if ($login!=null)
+          $this->readRSSByURL($url)->url();
       } else {
         // Retourne l'objet existant
         return $rss;
@@ -85,7 +89,7 @@
       else {
         $res = $req->fetchAll(PDO::FETCH_CLASS, "RSS", array($url));
         if (isset($res[0]))
-          return $res;
+          return $res[0];
         else
           return null;
       }
@@ -100,19 +104,23 @@
         die("getRSSByURL error: no rss finded\n");
       }
       else {
-        return $req->fetchAll(PDO::FETCH_CLASS, "RSS")[0];
+        $res=$req->fetchAll(PDO::FETCH_CLASS, "RSS");
+        if (isset($res[0]))
+          return $res[0];
+        else
+          return null;
       }
     }
 
     // Met à jour un flux
     function updateRSS(RSS $rss) {
       try {
-        $sql = "UPDATE RSS SET titre=?, date=? WHERE url=?";
+        $sql = "UPDATE RSS SET titre=?, `date`=? WHERE url=?";
         $req = $this->db->prepare($sql);
         $params=array(
-          $this->db->quote($rss->titre()),
-          $this->db->quote($rss->date()),
-          $this->db->quote($rss->url())
+          $rss->titre(),
+          date("d/m/Y H:i:s"),
+          $rss->url()
         );
         $res = $req->execute($params);
         debug($this->db,$sql,$params);
@@ -251,6 +259,58 @@
         die("readAbonnement error: requête impossible\n");
       }
       return $req->fetchAll();
+    }
+
+    function readUnfollowedRSS($login,$first,$limit) {
+      $sql = "SELECT * FROM RSS WHERE id >= ? AND id NOT IN ( SELECT idRSS AS id FROM Abonnement WHERE userLogin = ? ) LIMIT ?";
+      $req = $this->db->prepare($sql);
+      $params=array($first,$login,$limit);
+      $res = $req->execute($params);
+      debug($this->db,$sql,$params);
+      if ($res === FALSE) {
+        die("readUnfollowedRSS error: requête impossible\n");
+      }
+      else {
+        return $req->fetchAll(PDO::FETCH_CLASS, "RSS");
+      }
+    }
+
+    function addAbonnement($login, $idRSS, $nom=null, $categorie=null) {
+      try {
+        $sql = "INSERT INTO Abonnement(userLogin, idRSS, nom, categorie) values (?,?,?,?)";
+        $req = $this->db->prepare($sql);
+        $params = array(
+          $login,
+          $idRSS,
+          $nom,
+          $categorie
+        );
+        $res = $req->execute($params);
+        debug($this->db,$sql,$params);
+        if ($res === FALSE) {
+          die("addAbonnement error: requête impossible\n");
+        }
+      } catch (PDOException $e) {
+        die("PDO Error :".$e->getMessage());
+      }
+    }
+
+    function deleteAbonnement($login, $idRSS) {
+      try {
+        $sql = "DELETE FROM Abonnement WHERE userLogin = ? AND idRSS = ?";
+        $req = $this->db->prepare($sql);
+        $params = array(
+          $login,
+          $idRSS
+        );
+        $res = $req->execute($params);
+        debug($this->db,$sql,$params);
+        if ($res === FALSE) {
+          die("deleteAbonnement error: requête impossible\n");
+        }
+      } catch (PDOException $e) {
+        die("PDO Error :".$e->getMessage());
+      }
     }
 
     //////////////////////////////////////////////////////////

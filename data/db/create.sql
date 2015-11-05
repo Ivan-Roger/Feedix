@@ -24,7 +24,7 @@ CREATE TABLE Utilisateur(
 
 CREATE TABLE Abonnement (
   userLogin varchar(10),
-  idRSS int,
+  idRSS integer,
   nom varchar(40),
   categorie varchar(40),
   FOREIGN KEY (userLogin) REFERENCES Utilisateur(login),

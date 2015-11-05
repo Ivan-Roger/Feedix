@@ -6,7 +6,11 @@
   if (isset($_GET['action']) && $_GET['action']=="signOut")
     unset($_SESSION['user']);
   if (isset($_POST['action']) && $_POST['action']=="addRSS" && isset($_POST['url'])) {
-    $dao->createRSS($_POST['url']);
+    $dao->createRSS($_POST['url'],$_SESSION['user']);
+    $rss=$dao->readRSSByURL($_POST['url']);
+    $rss->update();
+    $dao->updateRSS($rss);
+    $data['info']="Flux ajouté !";
   }
 
   for ($i=1; $i<=4; $i++) {
