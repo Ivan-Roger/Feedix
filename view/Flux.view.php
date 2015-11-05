@@ -7,9 +7,15 @@
   </head>
   <body>
     <header>
+      <h1>Feedix - Flux</h1>
       <nav>
-        <h1>Feedix - Flux</h1>
-        <input type="submit" name="action" value="Se connecter" />
+        <ul>
+          <?php if (isset($data['user'])) { ?>
+            <li><?= $data['user'] ?> : <a href="#">Déconnexion</a></li>
+          <?php } else { ?>
+            <li><a href="seConnecter.ctrl.php">Connexion / Créer un compte</a></li>
+          <?php } ?>
+        </ul>
       </nav>
     </header>
     <section>
@@ -22,6 +28,7 @@
       <?php } ?>
     </section>
     <footer>
+      <?php var_dump($_SESSION); ?>
       <hr/>
       <p>Made by Ivan ROGER and Maxime GERMAIN<br/>2015</p>
     </footer>
