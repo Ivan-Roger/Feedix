@@ -47,7 +47,7 @@
   </style>
   <body>
     <header class="page-header">
-      <h1>Feedix - Nouvelle</h1>
+      <h1>Feedix - Nouvelle<br/><small><?= $data['flux']['titre'] ?></small></h1>
       <nav class="navbar">
         <div class="col-lg-6">
           <a class="btn btn-primary btn-lg" href="..">Home</a>

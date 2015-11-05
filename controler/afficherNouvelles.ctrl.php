@@ -22,6 +22,7 @@
     }
     $data['news'] = array();
     $data[0] = 1;
+    $data['flux']['titre'] = $dao->readRSSByID($_GET['rss'])->titre();
     if ($news!=null) {
       foreach ($news as $nouv) {
         $n['id'] = $nouv->id();

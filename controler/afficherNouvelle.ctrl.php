@@ -10,6 +10,7 @@
     $nouv = $dao->readNouvelleByID($_GET['id'],$_GET['rss']);
 
     $data['idRSS']=$_GET['rss'];
+    $data['flux']['titre'] = $dao->readRSSByID($_GET['rss'])->titre();
     $data['nouvelle']['title'] = $nouv->titre();
     $data['nouvelle']['date'] = $nouv->date();
     $data['nouvelle']['img'] = $nouv->imageURL();
