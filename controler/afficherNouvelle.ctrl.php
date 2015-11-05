@@ -1,14 +1,15 @@
 <?php
   require_once("../model/Nouvelle.class.php");
+  require_once("../model/DAO.class.php");
 
-  if (isset($_GET['rss']) && isset($_GET['titre'])) {
+  if (isset($_GET['rss']) && isset($_GET['id'])) {
     $dao = new DAO("../data/db/rss.db");
-    $nouv = $dao->readNouvellefromTitre($_GET['titre'],$_GET['rss']);
+    $nouv = $dao->readNouvelleByID($_GET['id'],$_GET['rss']);
 
-    $data['title'] = $nouv->titre();
-    $data['date'] = $nouv->date();
-    $data['img'] = $nouv->imageURL();
-    $data['desc'] = $nouv->description();
+    $data['nouvelle']['title'] = $nouv->titre();
+    $data['nouvelle']['date'] = $nouv->date();
+    $data['nouvelle']['img'] = $nouv->imageURL();
+    $data['nouvelle']['desc'] = $nouv->description();
 
     include("../view/Nouvelle.view.php");
   } else {

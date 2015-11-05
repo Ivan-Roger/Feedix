@@ -3,16 +3,22 @@
   <head>
     <meta charset="utf-8"/>
     <title>Feedix - Nouvelle</title>
+    <link rel="stylesheet" href="../view/style.css"/>
   </head>
   <body>
     <header>
       <h1>Feedix - Nouvelle</h1>
     </header>
     <section>
-      <h2><?php echo($data["title"]); ?></h2>
-      <i><?php echo($data['date']); ?></i>
-      <img alt="Image" src="<?php echo($data['img']); ?>"/>
-      <p><?php echo($data['desc']); ?></p>
+      <a href="..">Home</a><br/>
+      <article class="NouvelleDetailed">
+        <div class="pic">
+          <img alt="Image" src="../data/img/<?= ($data['nouvelle']['img']!=null?$data['nouvelle']['img']:"default.jpeg") ?>"/>
+        </div>
+        <h2><?= $data['nouvelle']['title']?></h2>
+        <i><?= $data['nouvelle']['date'] ?></i><br>
+        <p><?= $data['nouvelle']['desc'] ?></p>
+      </article>
     </section>
     <footer>
       <hr/>

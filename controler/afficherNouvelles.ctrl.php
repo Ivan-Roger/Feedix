@@ -21,6 +21,8 @@
     $data[0] = 1;
     if ($news!=null) {
       foreach ($news as $nouv) {
+        $n['id'] = $nouv->id();
+        $n['idRSS'] = $nouv->idRSS();
         $n['title'] = $nouv->titre();
         $n['date'] = $nouv->date();
         $n['img'] = $nouv->imageURL();

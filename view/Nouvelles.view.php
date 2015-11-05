@@ -12,11 +12,15 @@
     <section>
     <a href="..">Home</a><br/>
       <?php if (count($data["news"])>0) { foreach ($data["news"] as $nouvelle) {?>
-        <article>
+        <article class="Nouvelle">
           <div class="pic">
-            <img alt="Image" src="../data/img/<?= ($nouvelle['img']!=null?$nouvelle['img']:"default.jpeg") ?>"/>
+            <a href="afficherNouvelle.ctrl.php?id=<?= $nouvelle['id']?>&rss=<?= $nouvelle['idRSS'] ?>">
+              <img alt="Image" src="../data/img/<?= ($nouvelle['img']!=null?$nouvelle['img']:"default.jpeg") ?>"/>
+            </a>
           </div>
-          <h2><?= $nouvelle['title']?></h2>
+          <a href="afficherNouvelle.ctrl.php?id=<?= $nouvelle['id']?>&rss=<?= $nouvelle['idRSS'] ?>">
+            <h2><?= $nouvelle['title']?></h2>
+          </a>
           <i><?= $nouvelle['date'] ?></i><br>
           <p><?= $nouvelle['desc'] ?></p>
         </article>

@@ -212,11 +212,11 @@
           $sql = "UPDATE Nouvelle SET `date` = ? , titre = ? , description = ? , url = ? , imageID=? WHERE id=? AND idRSS = ?";
           $req = $this->db->prepare($sql);
           $params = array(
-            $this->db->quote($n->date()),
-            $this->db->quote($n->titre()),
-            $this->db->quote($n->description()),
-            $this->db->quote($n->URL()),
-            $this->db->quote($n->imageURL()),
+            $n->date(),
+            $n->titre(),
+            $n->description(),
+            $n->URL(),
+            $n->imageURL(),
             $n->id(),
             $n->idRSS()
           );
