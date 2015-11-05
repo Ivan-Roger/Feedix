@@ -21,7 +21,7 @@
     $data['followedRSS'] = array();
     $data['user']=$_SESSION['user'];
     foreach ($dao->readAbonnement($data['user']) as $idAbo) {
-      $rss=$dao->readRSSByID($idAbo);
+      $rss=$dao->readRSSByID($idAbo['idRSS']);
       $info['id'] = $rss->id();
       $info['titre'] = $rss->titre();
       $info['url'] = $rss->url();

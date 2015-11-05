@@ -3,33 +3,83 @@
   <head>
     <meta charset="utf-8"/>
     <title>Feedix - Connexion</title>
-    <link rel="stylesheet" href="../view/style.css"/>
+    <link href="../data/css/bootstrap.css" rel="stylesheet">
   </head>
+  <style type="text/css">
+     [class*="col"] { margin-bottom: 20px; }
+     body { margin-top: 10px;
+            margin:0
+            padding:0;
+          }
+
+      header {
+        background-color: #00C0F0;
+      }
+      header h1 {
+        color: white;
+        text-align: center;
+        font-weight:bold;
+        text-shadow:
+      #000000 1px 1px,
+      #000000 -1px 1px,
+      #000000 -1px -1px,
+      #000000 1px -1px;
+        font-size: 70px;
+      }
+      footer p {
+        text-align: center;
+      }
+  </style>
   <body>
-    <header>
+    <header class="page-header">
       <h1>Feedix - Connexion</h1>
+      <nav class="navbar navbar-right">
+        <a class="btn btn-primary btn-lg" href="..">Home</a>
+      </nav>
     </header>
     <section>
-      <a href="..">Home</a><br/>
-      <?php if (isset($data['error'])) echo("<p>".$data['error']."</p>") ?>
-      <article>
+      <?php if (isset($data['error'])) echo("<p class='alert alert-danger'>".$data['error']."</p>") ?>
+      <article class="col-lg-6">
         <h2>Connexion</h2>
-        <form action="seConnecter.ctrl.php" method="POST">
+        <form action="seConnecter.ctrl.php" method="POST" class="form-horizontal">
           <input name="action" type="hidden" value="connect">
-          <input required name="user" type="text" placeholder="Utilisateur"/>
-          <input required name="pass" type="password" placeholder="Mot de passe"/>
-          <input type="submit" value="Connexion"/>
+          <div class="form-group">
+            <label for="login-user" class="col-sm-2 control-label">Utilisateur</label>
+            <div class="col-sm-6"><input type="text" required id="login-user" name="user" class="form-control"></div>
+          </div>
+          <div class="form-group">
+            <label for="login-password" class="col-sm-2 control-label">Mot de passe</label>
+            <div class="col-sm-6"><input type="password" required id="login-password" name="pass" class="form-control"></div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-6">
+              <input class="btn btn-info" type="submit" value="Connexion"/>
+            </div>
+          </div>
         </form>
       </article>
-      <article>
+      <article class="col-lg-6">
         <h2>Inscription</h2>
-        <form action="seConnecter.ctrl.php" method="POST" onsubmit="return validate();">
+        <form action="seConnecter.ctrl.php" method="POST" class="form-horizontal">
           <p id="connectInfo"></p>
           <input name="action" type="hidden" value="signIn">
-          <input required name="user" type="text" placeholder="Utilisateur"/>
-          <input required name="pass" type="password" placeholder="Mot de passe"/>
-          <input required name="pass2" type="password" placeholder="Confirmation mot de passe"/>
-          <input type="submit" value="Inscription"/>
+          <div class="form-group">
+            <label for="signIn-user" class="col-sm-2 control-label">Utilisateur</label>
+            <div class="col-sm-6"><input type="text" required id="signIn-user" name="user" class="form-control"></div>
+          </div>
+          <div class="form-group">
+            <label for="signIn-password" class="col-sm-2 control-label">Mot de passe</label>
+            <div class="col-sm-6"><input type="password" required id="signIn-password" name="pass" class="form-control"></div>
+          </div>
+          <div class="form-group">
+            <label for="signIn-password" class="col-sm-2 control-label">Confirmation</label>
+            <div class="col-sm-6"><input type="password" required id="signIn-password" name="pass2" class="form-control"></div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-6">
+              <input class="btn btn-info" type="submit" value="Inscription"/>
+            </div>
+          </div>
         </form>
       </article>
     </section>

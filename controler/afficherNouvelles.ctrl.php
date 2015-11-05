@@ -1,4 +1,4 @@
-<pre><?php
+<?php
   require_once("../model/DAO.class.php");
   require_once("../model/RSS.class.php");
   require_once("../model/Nouvelle.class.php");
@@ -32,7 +32,6 @@
     } else {
       //echo("--- Debug: Pas de nouvelles\n");
     }
-    echo("</pre>");
     include("../view/Nouvelles.view.php");
   } else {
     header("Location:"."..");

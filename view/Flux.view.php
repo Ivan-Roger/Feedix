@@ -29,43 +29,43 @@
       footer p {
         text-align: center;
       }
-   </style>
+  </style>
   <body>
 
     <header class="page-header">
       <h1>Feedix - Flux</h1>
-        <nav class="navbar-right">
+        <nav class="navbar navbar-right">
           <?php if (isset($data['user'])) { ?>
             <?= $data['user'] ?> : <a class="btn btn-danger btn-lg" href="afficherFlux.ctrl.php?action=signOut">Déconnexion</a>
           <?php } else { ?>
             <a class="btn btn-primary btn-lg" href="seConnecter.ctrl.php" >Connexion / Créer un compte</a>
           <?php } ?>
-        </nav>-->
+        </nav>
 
     </header>
     <?php if (isset($data['user'])) { ?>
-    <section>
+    <section class="col-lg-12">
       <h2>Abonnements</h2>
       <?php if (count($data["followedRSS"])>0) { foreach ($data["followedRSS"] as $flux) { ?>
         <article class="col-lg-6">
-          <h2 >#<?= $flux['id'] ?> : <?= $flux["titre"] ?></h2>
+          <h3><?= $flux["titre"] ?></h2>
           <i><a href="<?= $flux['url'] ?>"><?= $flux['url'] ?></a></i>
           <b class="btn-group"><a class="btn btn-default" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>">Lire ...</a> <a class="btn btn-default" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>&update=1">Mettre à jour</a></b>
         </article>
       <?php } } else { ?>
-        <p>Vous n'êtes abonnés a aucun flux</p>
+        <p>Vous n'êtes abonné à aucun flux</p>
       <?php } ?>
     </section>
     <?php } ?>
-    <section>
+    <section class="col-lg-12">
       <?php if (isset($data['user'])) { ?>
       <h2>Flux par défaut</h2>
       <?php } ?>
       <?php foreach ($data["defaultRSS"] as $flux) {?>
         <article class="col-lg-6">
-          <h2><?= $flux["titre"] ?></h2>
+          <h3><?= $flux["titre"] ?></h2>
           <i><a href="<?= $flux['url'] ?>"><?= $flux['url'] ?></a></i>
-          <b><a href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>">Lire ...</a> / <a href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>&update=1">Mettre à jour.</a></b>
+          <b class="btn-group"><a class="btn btn-default" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>">Lire ...</a> <a class="btn btn-default" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>&update=1">Mettre à jour</a></b>
         </article>
       <?php } ?>
     </section>
