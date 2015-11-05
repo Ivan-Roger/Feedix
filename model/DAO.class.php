@@ -167,7 +167,7 @@
     // Crée une nouvelle dans la base à partir d'un objet nouvelle
     // et de l'id du flux auquelle elle appartient
     function createNouvelle(Nouvelle $n) {
-      $sql = "INSERT INTO Nouvelle (id, idRSS, `date`, titre, description, image) values (?,?,?, ?, ?, ?)";
+      $sql = "INSERT INTO Nouvelle (id, idRSS, `date`, titre, description, imageID) values (?,?,?, ?, ?, ?)";
       $req = $this->db->prepare($sql);
       $params = array(
         $n->id(),
@@ -184,15 +184,38 @@
       }
     }
 
-    // Met à jour le champ image de la nouvelle dans la base
-    function updateImageNouvelle(Nouvelle $n) {
+    // Met à jour la nouvelle dans la base
+    function updateNouvelle(Nouvelle $n) {
       try {
-        $img = $this->db->quote($n->imageURL());
-        $sql = "UPDATE RSS SET image=? WHERE id='?'";
+        $sql = "SELECT COUNT(*) AS nb FROM Nouvelle WHERE id=? AND idRSS = ?";
         $req = $this->db->prepare($sql);
-        $res = $req->execute(array($img,$n->id()));
+        $params = array(
+          $n->id(),
+          $n->idRSS()
+        );
+        debug($this->db,$sql,$params);
+        $res = $req->execute($params);
         if ($res === FALSE) {
-          die("updateImageNouvelle error: no nouvelle updated\n");
+          die("updateNouvelle error : requête comptage impossible\n");
+        }
+        if ($req->fetch()['nb']>0) { // La ligne existe, on la met a jour.
+          $sql = "UPDATE Nouvelle SET `date` = ? , titre = ? , description = ? , url = ? , imageID=? WHERE id=? AND idRSS = ?";
+          $req = $this->db->prepare($sql);
+          $params = array(
+            $this->db->quote($n->date()),
+            $this->db->quote($n->titre()),
+            $this->db->quote($n->description()),
+            $this->db->quote($n->URL()),
+            $this->db->quote($n->imageURL()),
+            $n->id(),
+            $n->idRSS()
+          );
+          $res = $req->execute($params);
+          if ($res === FALSE) {
+            die("updateImageNouvelle error: update impossible\n");
+          }
+        } else { // La ligne n'existe pas, on la crée
+          $this->createNouvelle($n);
         }
       } catch (PDOException $e) {
         die("PDO Error :".$e->getMessage());

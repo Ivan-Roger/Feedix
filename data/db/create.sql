@@ -12,7 +12,7 @@ CREATE TABLE Nouvelle (
   titre varchar(255),
   description varchar(255),
   url varchar(255),
-  image varchar(80),
+  imageID varchar(80),
   FOREIGN KEY (idRSS) REFERENCES RSS(id),
   PRIMARY KEY (id,idRSS)
 );

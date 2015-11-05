@@ -13,10 +13,10 @@
       $news = $rss->news();
       foreach ($news as $nouv) {
         var_dump($nouv);
-        $dao->createNouvelle($nouv);
+        $dao->updateNouvelle($nouv);
       }
     } else {
-      $dao->readNouvelles(0,$_GET['rss'],20);
+      $news=$dao->readNouvelles(0,$_GET['rss'],20);
     }
     $data['news'] = array();
     $data[0] = 1;
