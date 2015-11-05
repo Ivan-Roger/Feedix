@@ -1,5 +1,5 @@
 <?php
-  $DEBUG = FALSE;
+  $DEBUG = TRUE;
 
   require_once("RSS.class.php");
   require_once("Nouvelle.class.php");
@@ -83,7 +83,11 @@
         die("getRSSByURL error: no rss finded (".($res?'true':'false').")\n");
       }
       else {
-        return $req->fetchAll(PDO::FETCH_CLASS, "RSS", array($url))[0];
+        $res = $req->fetchAll(PDO::FETCH_CLASS, "RSS", array($url));
+        if (isset($res[0]))
+          return $res;
+        else
+          return null;
       }
     }
 
@@ -102,7 +106,6 @@
 
     // Met à jour un flux
     function updateRSS(RSS $rss) {
-      // Met à jour uniquement le titre et la date
       try {
         $sql = "UPDATE RSS SET titre=?, date=? WHERE url=?";
         $req = $this->db->prepare($sql);
@@ -135,9 +138,7 @@
       if ($res === FALSE) {
         die("readNouvelle error: no Nouvelle finded\n");
       }
-      else {
-        return $req->fetchAll(PDO::FETCH_CLASS, "Nouvelle",array($RSS_id));
-      }
+      return $req->fetchAll(PDO::FETCH_CLASS, "Nouvelle",array($RSS_id));
     }
 
     // Acces à une nouvelle à partir de son titre et l'ID du flux
@@ -177,20 +178,24 @@
     // Crée une nouvelle dans la base à partir d'un objet nouvelle
     // et de l'id du flux auquelle elle appartient
     function createNouvelle(Nouvelle $n) {
-      $sql = "INSERT INTO Nouvelle (id, idRSS, `date`, titre, description, imageID) values (?,?,?, ?, ?, ?)";
-      $req = $this->db->prepare($sql);
-      $params = array(
-        $n->id(),
-        $n->idRSS(),
-        $n->date(),
-        $n->titre(),
-        $n->description(),
-        $n->imageURL()
-      );
-      $res = $req->execute($params);
-      debug($this->db,$sql,$params);
-      if ($res === FALSE) {
-        die("createNouvelle error: no nouvelle finded\n");
+      try {
+        $sql = "INSERT INTO Nouvelle (id, idRSS, `date`, titre, description, imageID) values (?,?,?, ?, ?, ?)";
+        $req = $this->db->prepare($sql);
+        $params = array(
+          $n->id(),
+          $n->idRSS(),
+          $n->date(),
+          $n->titre(),
+          $n->description(),
+          $n->imageURL()
+        );
+        $res = $req->execute($params);
+        debug($this->db,$sql,$params);
+        if ($res === FALSE) {
+          die("createNouvelle error: no nouvelle finded\n");
+        }
+      } catch (PDOException $e) {
+        die("PDO Error :".$e->getMessage());
       }
     }
 
@@ -232,64 +237,79 @@
       }
     }
 
+    //////////////////////////////////////////////////////////
+    // Methodes CRUD sur Abonnement
+    //////////////////////////////////////////////////////////
 
-  //////////////////////////////////////////////////////////
-  // Methodes sur Utilisateur
-  //////////////////////////////////////////////////////////
-
-  function createUser($login,$pass) {
-    try {
-      if ($this->validateLogin($login))
-        return false;
-      $sql = "INSERT INTO Utilisateur VALUES (?,?)";
+    function readAbonnement($login,$first=1,$limit=20) {
+      $sql = "SELECT idRSS FROM Abonnement WHERE userLogin = ? AND idRSS > ? ORDER BY idRSS LIMIT ?";
       $req = $this->db->prepare($sql);
-      $params = array(
-        $login,
-        $pass
-      );
+      $params = array($login,$first,$limit);
       $res = $req->execute($params);
-      if ($res ===FALSE) {
-        die("createUser error : requête impossible\n");
+      debug($this->db,$sql,$params);
+      if ($res === FALSE) {
+        die("readAbonnement error: requête impossible\n");
       }
-      return true;
-    } catch (PDOException $e) {
-      die("PDO Error :".$e->getMessage());
+      return $req->fetchAll();
+    }
+
+    //////////////////////////////////////////////////////////
+    // Methodes sur Utilisateur
+    //////////////////////////////////////////////////////////
+
+    function createUser($login,$pass) {
+      try {
+        if ($this->validateLogin($login))
+          return false;
+        $sql = "INSERT INTO Utilisateur VALUES (?,?)";
+        $req = $this->db->prepare($sql);
+        $params = array(
+          $login,
+          $pass
+        );
+        $res = $req->execute($params);
+        if ($res ===FALSE) {
+          die("createUser error : requête impossible\n");
+        }
+        return true;
+      } catch (PDOException $e) {
+        die("PDO Error :".$e->getMessage());
+      }
+    }
+
+    function validateLogin($userLogin) {
+      try {
+        $sql = "SELECT COUNT(*) AS ok FROM Utilisateur WHERE login = ?";
+        $req = $this->db->prepare($sql);
+        $params = array(
+          $userLogin
+        );
+        $res = $req->execute($params);
+        if ($res ===FALSE) {
+          die("validateLogin error : requête impossible\n");
+        }
+        return $req->fetch()['ok']>0;
+      } catch (PDOException $e) {
+        die("PDO Error :".$e->getMessage());
+      }
+    }
+
+    function validatePassword($userLogin,$passwd) {
+      try {
+        $sql = "SELECT COUNT(*) AS ok FROM Utilisateur WHERE login = ? AND pass = ?";
+        $req = $this->db->prepare($sql);
+        $params = array(
+          $userLogin,
+          $passwd
+        );
+        $res = $req->execute($params);
+        if ($res ===FALSE) {
+          die("validatePassword error : requête impossible\n");
+        }
+        return $req->fetch()['ok']>0;
+      } catch (PDOException $e) {
+        die("PDO Error :".$e->getMessage());
+      }
     }
   }
-
-  function validateLogin($userLogin) {
-    try {
-      $sql = "SELECT COUNT(*) AS ok FROM Utilisateur WHERE login = ?";
-      $req = $this->db->prepare($sql);
-      $params = array(
-        $userLogin
-      );
-      $res = $req->execute($params);
-      if ($res ===FALSE) {
-        die("validateLogin error : requête impossible\n");
-      }
-      return $req->fetch()['ok']>0;
-    } catch (PDOException $e) {
-      die("PDO Error :".$e->getMessage());
-    }
-  }
-
-  function validatePassword($userLogin,$passwd) {
-    try {
-      $sql = "SELECT COUNT(*) AS ok FROM Utilisateur WHERE login = ? AND pass = ?";
-      $req = $this->db->prepare($sql);
-      $params = array(
-        $userLogin,
-        $passwd
-      );
-      $res = $req->execute($params);
-      if ($res ===FALSE) {
-        die("validatePassword error : requête impossible\n");
-      }
-      return $req->fetch()['ok']>0;
-    } catch (PDOException $e) {
-      die("PDO Error :".$e->getMessage());
-    }
-  }
-}
 ?>
