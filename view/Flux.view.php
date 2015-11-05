@@ -3,10 +3,14 @@
   <head>
     <meta charset="utf-8"/>
     <title>Feedix - Flux</title>
+    <link rel="stylesheet" href="../view/style.css"/>
   </head>
   <body>
     <header>
-      <h1>Feedix - Flux</h1>
+      <nav>
+        <h1>Feedix - Flux</h1>
+        <input type="submit" name="action" value="Se connecter" />
+      </nav>
     </header>
     <section>
       <?php foreach ($data["flux"] as $flux) {?>

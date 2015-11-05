@@ -1,3 +1,21 @@
+body {
+  font-family: "Comic Sans MS","Trebuchet MS",serif;
+  margin:0;
+  background-color: #FF6347;
+}
+
+header nav { background-color: #800000;
+            width:100%;
+            top: 0;
+            left: 0;
+
+            position: fixed;
+          }
+
+header h1 {
+  text-align:center;
+}
+
 article {
   vertical-align: top;
   width: 350px;
