@@ -8,7 +8,7 @@
   <style type="text/css">
      [class*="col"] { margin-bottom: 20px; }
      body { margin-top: 10px;
-            margin:0;
+            margin:0
             padding:0;
           }
 
@@ -24,20 +24,21 @@
       #000000 -1px 1px,
       #000000 -1px -1px,
       #000000 1px -1px;
-        font-size: 50px;
+        font-size: 70px;
       }
 
    </style>
   <body>
+
     <header class="page-header">
-      <h1 class="">Feedix - Flux</h1>
+      <h1>Feedix - Flux</h1>
         <nav class="navbar-right">
           <?php if (isset($data['user'])) { ?>
-            <?= $data['user'] ?> : <a class="btn btn-danger" href="#">Déconnexion</a>
+            <?= $data['user'] ?> : <a class="btn btn-danger btn-lg" href="#">Déconnexion</a>
           <?php } else { ?>
-            <a class="btn btn-primary" href="#" >Connexion / Créer un compte</a>
+            <a class="btn btn-primary btn-lg"href="#" >Connexion / Créer un compte</a>
           <?php } ?>
-        </nav>
+        </nav>-->
 
     </header>
     <section>
@@ -45,7 +46,7 @@
         <article class="col-lg-6">
           <h2 >#<?= $flux['id'] ?> : <?= $flux["titre"] ?></h2>
           <i><a href="<?= $flux['url'] ?>"><?= $flux['url'] ?></a></i>
-          <b><a href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>">Lire ...</a> / <a href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>&update=1">Mettre à jour.</a></b>
+          <b class="btn-group"><a class="btn btn-default" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>">Lire ...</a> <a class="btn btn-default" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>&update=1">Mettre à jour</a></b>
         </article>
       <?php } ?>
     </section>
