@@ -1,10 +1,8 @@
 #! /bin/bash
 
 usage="Usage : $0 [commit \"Message pour le commit\" | pull]"
-if [ $# <= 1 ]
+if [ $# -ge 1 ]
 then
-	echo $usage
-else
 	if [ -d "`pwd`/.git" ]
 	then
 		if [ $1 = "init" ]
@@ -34,4 +32,6 @@ else
 	else
 		echo "No git repository initialized for this directory ..."
 	fi
+else
+	echo $usage
 fi
