@@ -1,0 +1,30 @@
+#! /bin/bash
+
+usage="Usage : $0 [commit \"Message pour le commit\" | pull]"
+if [ $# <= 1 ]
+then
+	echo $usage
+else
+	if [ -d "`pwd`/.git" ]
+	then
+		if [ $1 = "init" ]
+		then
+			cp ./GIT ~/local/bin/
+		else if [ $1 = "commit" ]
+			git add *
+			git rm data/img/*_* --cached
+			git commit -m "$1"
+			git push origin master
+		else if [ $1 = "pull" ]
+			git pull origin master
+			if [ -f perm.sh ]
+			then
+				bahs perm.sh
+			fi
+		else
+			echo $usage
+		fi
+	else
+		echo "No git repository initialized for this directory ..."
+	fi
+fi
