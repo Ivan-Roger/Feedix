@@ -10,6 +10,7 @@ else
 		if [ $1 = "init" ]
 		then
 			cp ./GIT ~/local/bin/
+			chmod u+x ~/local/bin/GIT
 		else if [ $1 = "commit" ]
 			git add *
 			git rm data/img/*_* --cached
