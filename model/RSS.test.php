@@ -40,8 +40,7 @@
   require_once('DAO.class.php');
   $dao = new DAO("../data/db/rss.db");
 
-  $rss = $dao->readRSSByID(0);
-  $rss->update();
+  $res = $dao->readNouvelleByID(1,1);
+  var_dump($res);
 
-  
 ?></pre>

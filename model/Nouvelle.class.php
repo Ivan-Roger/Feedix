@@ -10,10 +10,11 @@
     private $description;
 
     function __construct($idRSS,$id=null,DOMElement $item=null) {
-      $this->imageID=null;
       $this->idRSS=$idRSS;
-      if ($item!=null)
+      if ($item!=null) {
+        $this->imageID=null;
         $this->update($item);
+      }
       if ($id!=null)
         $this->id=$id;
     }

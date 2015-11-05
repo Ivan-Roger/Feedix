@@ -1,18 +1,23 @@
 <?php
+  $DEBUG = FALSE;
+
   require_once("RSS.class.php");
   require_once("Nouvelle.class.php");
 
   function debug($db,$sql,$params) {
-    echo "Requête : ".$sql."\n";
-    echo "Paramétres : ";
-    foreach ($params as $p) {
-      echo $p."\t";
-    }
-    echo "\n";
-    if ($db->errorInfo()[1]!=null) {
-      echo "DB error : ".$db->errorInfo()[2]."\n";
-    } else {
-      echo "Success !\n";
+    global $DEBUG;
+    if ($DEBUG) {
+      echo "Requête : ".$sql."\n";
+      echo "Paramétres : ";
+      foreach ($params as $p) {
+        echo $p."\t";
+      }
+      echo "\n";
+      if ($db->errorInfo()[1]!=null) {
+        echo "DB error : ".$db->errorInfo()[2]."\n";
+      } else {
+        echo "Success !\n";
+      }
     }
   }
 
@@ -153,11 +158,16 @@
 
     // Acces à une nouvelle à partir de son ID et l'ID du flux
     function readNouvelleByID($id,$RSS_id) {
-      $sql = "Select * from RSS where id = ? and id = ?";
+      $sql = "SELECT * FROM Nouvelle WHERE id = ? AND idRSS = ?";
       $req = $this->db->prepare($sql);
-      $res = $req->execute(array($id,$RSS_id));
+      $params = array(
+        $id,
+        $RSS_id
+      );
+      $res = $req->execute($params);
+      debug($this->db,$sql,$params);
       if ($req === FALSE) {
-        die("getNouvelleByID error: no nouvelle inserted\n");
+        die("readNouvelleByID error: no nouvelle found\n");
       }
       else {
         return $req->fetchAll(PDO::FETCH_CLASS, "Nouvelle",array($RSS_id))[0];

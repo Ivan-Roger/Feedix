@@ -11,7 +11,7 @@
     </header>
     <section>
     <a href="..">Home</a><br/>
-      <?php foreach ($data["news"] as $nouvelle) {?>
+      <?php if (count($data["news"])>0) { foreach ($data["news"] as $nouvelle) {?>
         <article>
           <div class="pic">
             <img alt="Image" src="../data/img/<?= ($nouvelle['img']!=null?$nouvelle['img']:"default.jpeg") ?>"/>
@@ -20,6 +20,8 @@
           <i><?= $nouvelle['date'] ?></i><br>
           <p><?= $nouvelle['desc'] ?></p>
         </article>
+      <?php }} else { ?>
+        <p class="info">Il n'y a rien ici ... Essayez de mettre à jour !</p>
       <?php } ?>
     </section>
     <footer>
