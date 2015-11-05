@@ -1,8 +1,11 @@
 <?php
+  session_start();
   require_once("../model/DAO.class.php");
   require_once("../model/RSS.class.php");
   require_once("../model/Nouvelle.class.php");
 
+  if (isset($_SESSION['user']))
+    $data['user']=$_SESSION['user'];
   if (isset($_GET['rss']) && $_GET['rss']!=null) {
     $dao = new DAO("../data/db/rss.db");
     $rss = $dao->readRSSByID($_GET['rss']);

@@ -31,7 +31,7 @@
       }
       article {
         overflow: hidden;
-        max-height: 500px;
+        max-height: 350px;
         background-color: #DDD;
         border: 1px solid #AAA;
         border-bottom: none;
@@ -39,32 +39,55 @@
         border-top-right-radius: 5px;
         background: linear-gradient(rgba(200,200,200,1), rgba(200,200,200,1), rgba(200,200,200,1), rgba(200,200,200,1), rgba(200,200,200,1), rgba(200,200,200,1), rgba(200,200,200,0));
       }
+      article p img {
+        display: none;
+      }
   </style>
   </head>
   <body>
     <header class="page-header">
       <h1>Feedix - Nouvelles</h1>
+      <nav class="navbar">
+        <div class="col-lg-4">
+          <a class="btn btn-primary btn-lg" href="..">Home</a>
+        </div>
+        <div class="col-lg-4 col-lg-offset-4 text-right">
+          <?php if (isset($data['user'])) { ?>
+            <a class="btn btn-danger btn-lg" href="afficherFlux.ctrl.php?action=signOut">Déconnexion (<?= $data['user'] ?>)</a>
+          <?php } else { ?>
+            <a class="btn btn-primary btn-lg" href="seConnecter.ctrl.php" >Connexion / Créer un compte</a>
+          <?php } ?>
+        </div>
+      </nav>
     </header>
     <div class="container">
       <section class="col-lg-12">
-      <a href="..">Home</a><br/>
         <?php $i=1; if (count($data["news"])>0) { foreach ($data["news"] as $nouvelle) {?>
-          <?php if ($i==0) { ?><div class="row"><?php } ?>
-          <article class="col-lg-3">
-          <div>
+          <?php if ($i==1) { ?>
+          <div class="row">
+          <?php } ?>
+            <article class="col-lg-3">
+            <div>
+              <a href="afficherNouvelle.ctrl.php?id=<?= $nouvelle['id']?>&rss=<?= $nouvelle['idRSS'] ?>">
+                <img alt="Image" class="col-lg-12" src="../data/img/<?= ($nouvelle['img']!=null?$nouvelle['img']:"default.jpeg") ?>"/>
+              </a>
+            </div>
             <a href="afficherNouvelle.ctrl.php?id=<?= $nouvelle['id']?>&rss=<?= $nouvelle['idRSS'] ?>">
-              <img alt="Image" class="col-lg-12" src="../data/img/<?= ($nouvelle['img']!=null?$nouvelle['img']:"default.jpeg") ?>"/>
+              <h3 class="panel-title"><?= $nouvelle['title']?></h3>
             </a>
-          </div>
-          <a href="afficherNouvelle.ctrl.php?id=<?= $nouvelle['id']?>&rss=<?= $nouvelle['idRSS'] ?>">
-            <h3 class="panel-title"><?= $nouvelle['title']?></h3>
-          </a>
-          <i><?= $nouvelle['date'] ?></i><br>
-          <p><?= $nouvelle['desc'] ?></p>
-          </article>
-          <div class="col-lg-1"></div>
-          <?php if ($i==0) { ?></div><br/><br/><?php } ?>
-        <?php if ($i==2) $i=0; else $i++; }} else { ?>
+            <i><?= $nouvelle['date'] ?></i><br>
+            <p><?= $nouvelle['desc'] ?></p>
+            </article>
+            <div class="col-lg-1"></div>
+          <?php
+            if ($i==3) {
+              $i=1;
+              echo("</div><br/><br/>\n");
+            } else
+              $i++;
+            }
+          } else {
+        ?>
           <p class="alert alert-info">Il n'y a rien ici ... Essayez de mettre à jour !</p>
         <?php } ?>
       </section>

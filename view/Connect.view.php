@@ -33,8 +33,10 @@
   <body>
     <header class="page-header">
       <h1>Feedix - Connexion</h1>
-      <nav class="navbar navbar-right">
-        <a class="btn btn-primary btn-lg" href="..">Home</a>
+      <nav class="navbar">
+        <div class="col-lg-4 col-lg-offset-8">
+          <a class="btn btn-primary btn-lg" href="..">Home</a>
+        </div>
       </nav>
     </header>
     <section>

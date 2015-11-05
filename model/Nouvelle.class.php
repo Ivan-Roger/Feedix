@@ -52,7 +52,7 @@
       $this->titre = $nodeList->item(0)->textContent;
 
       $nodeList = $item->getElementsByTagName('pubDate');
-      $this->date = $nodeList->item(0)->textContent;
+      $this->date = date("d/m/Y H:i:s",strtotime($nodeList->item(0)->textContent));
 
       $nodeList = $item->getElementsByTagName('description');
       $this->description = $nodeList->item(0)->textContent;

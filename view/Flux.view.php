@@ -34,12 +34,17 @@
 
     <header class="page-header">
       <h1>Feedix - Flux</h1>
-        <nav class="navbar navbar-right">
-          <?php if (isset($data['user'])) { ?>
-            <?= $data['user'] ?> : <a class="btn btn-danger btn-lg" href="afficherFlux.ctrl.php?action=signOut">Déconnexion</a>
-          <?php } else { ?>
-            <a class="btn btn-primary btn-lg" href="seConnecter.ctrl.php" >Connexion / Créer un compte</a>
-          <?php } ?>
+        <nav class="navbar">
+          <div class="col-lg-4">
+            <a class="btn btn-primary btn-lg active" href="..">Home</a>
+          </div>
+          <div class="col-lg-4 col-lg-offset-4 text-right">
+            <?php if (isset($data['user'])) { ?>
+              <a class="btn btn-danger btn-lg" href="afficherFlux.ctrl.php?action=signOut">Déconnexion (<?= $data['user'] ?>)</a>
+            <?php } else { ?>
+              <a class="btn btn-primary btn-lg" href="seConnecter.ctrl.php" >Connexion / Créer un compte</a>
+            <?php } ?>
+          </div>
         </nav>
 
     </header>
@@ -49,8 +54,12 @@
       <?php if (count($data["followedRSS"])>0) { foreach ($data["followedRSS"] as $flux) { ?>
         <article class="col-lg-6">
           <h3><?= $flux["titre"] ?></h2>
-          <i><a href="<?= $flux['url'] ?>"><?= $flux['url'] ?></a></i>
-          <b class="btn-group"><a class="btn btn-default" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>">Lire ...</a> <a class="btn btn-default" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>&update=1">Mettre à jour</a></b>
+          <i class="col-lg-12"><a href="<?= $flux['url'] ?>"><?= $flux['url'] ?></a></i><br/>
+          <div class="col-lg-5 col-lg-offset-2"><div class="text-right">
+            <a class="btn btn-info" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>">Lire ...</a>
+            <a class="btn btn-warning" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>&update=1">Mettre à jour</a>
+            <a class="btn btn-danger" href="afficherFlux.ctrl.php?action=unfollow&rss=<?= $flux['id'] ?>">Ne plus suivre</a>
+          </div></div>
         </article>
       <?php } } else { ?>
         <p>Vous n'êtes abonné à aucun flux</p>
@@ -64,8 +73,11 @@
       <?php foreach ($data["defaultRSS"] as $flux) {?>
         <article class="col-lg-6">
           <h3><?= $flux["titre"] ?></h2>
-          <i><a href="<?= $flux['url'] ?>"><?= $flux['url'] ?></a></i>
-          <b class="btn-group"><a class="btn btn-default" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>">Lire ...</a> <a class="btn btn-default" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>&update=1">Mettre à jour</a></b>
+          <i class="col-lg-12"><a href="<?= $flux['url'] ?>"><?= $flux['url'] ?></a></i>
+          <div class="col-lg-5 col-lg-offset-2"><div class="text-right">
+            <a class="btn btn-info" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>">Lire ...</a>
+            <a class="btn btn-warning" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>&update=1">Mettre à jour</a>
+          </b>
         </article>
       <?php } ?>
     </section>
@@ -79,19 +91,17 @@
             <input type="submit" value="Ajouter"/>
           </fieldset>
         </form>
-        <form class="col-lg-6" action="afficherFlux.ctrl.php" method="POST">
-          <fieldset>
-            <legend>S'abonner</legend>
-            <input type="hidden" name="action" value="addRSS"/>
-            <input name="url" type="text" placeholder="URL"/>
-            <input type="submit" value="Ajouter"/>
-          </fieldset>
-        </form>
+        <fieldset class="col-lg-6">
+          <legend>S'abonner</legend>
+          <button class="btn btn-info">Chercher un flux</button>
+        </fieldset>
       </section>
     <?php } ?>
     <footer class="col-lg-12">
       <hr/>
       <p>Made by Ivan ROGER and Maxime GERMAIN<br/>2015</p>
     </footer>
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="../data/js/bootstrap.min.js"></script>
   </body>
 </html>
