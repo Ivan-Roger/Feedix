@@ -32,9 +32,12 @@
     <header class="page-header">
       <h1 class="">Feedix - Flux</h1>
         <nav class="navbar-right">
-          <a class="btn btn-primary" href="#" > se connecter </a>
+          <?php if (isset($data['user'])) { ?>
+            <?= $data['user'] ?> : <a class="btn btn-danger" href="#">Déconnexion</a>
+          <?php } else { ?>
+            <a class="btn btn-primary" href="#" >Connexion / Créer un compte</a>
+          <?php } ?>
         </nav>
-
 
     </header>
     <section>
@@ -47,6 +50,7 @@
       <?php } ?>
     </section>
     <footer class="col-lg-12">
+      <?php var_dump($_SESSION); ?>
       <hr/>
       <p>Made by Ivan ROGER and Maxime GERMAIN<br/>2015</p>
     </footer>

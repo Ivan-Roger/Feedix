@@ -231,8 +231,65 @@
         die("PDO Error :".$e->getMessage());
       }
     }
+
+
+  //////////////////////////////////////////////////////////
+  // Methodes sur Utilisateur
+  //////////////////////////////////////////////////////////
+
+  function createUser($login,$pass) {
+    try {
+      if ($this->validateLogin($login))
+        return false;
+      $sql = "INSERT INTO Utilisateur VALUES (?,?)";
+      $req = $this->db->prepare($sql);
+      $params = array(
+        $login,
+        $pass
+      );
+      $res = $req->execute($params);
+      if ($res ===FALSE) {
+        die("createUser error : requête impossible\n");
+      }
+      return true;
+    } catch (PDOException $e) {
+      die("PDO Error :".$e->getMessage());
+    }
   }
 
+  function validateLogin($userLogin) {
+    try {
+      $sql = "SELECT COUNT(*) AS ok FROM Utilisateur WHERE login = ?";
+      $req = $this->db->prepare($sql);
+      $params = array(
+        $userLogin
+      );
+      $res = $req->execute($params);
+      if ($res ===FALSE) {
+        die("validateLogin error : requête impossible\n");
+      }
+      return $req->fetch()['ok']>0;
+    } catch (PDOException $e) {
+      die("PDO Error :".$e->getMessage());
+    }
+  }
 
-  //echo("Error DB : ".$this->db->errorInfo()[2]);
+  function validatePassword($userLogin,$passwd) {
+    try {
+      $sql = "SELECT COUNT(*) AS ok FROM Utilisateur WHERE login = ? AND pass = ?";
+      $req = $this->db->prepare($sql);
+      $params = array(
+        $userLogin,
+        $passwd
+      );
+      $res = $req->execute($params);
+      if ($res ===FALSE) {
+        die("validatePassword error : requête impossible\n");
+      }
+      return $req->fetch()['ok']>0;
+    } catch (PDOException $e) {
+      die("PDO Error :".$e->getMessage());
+    }
+  }
+}
 ?>
