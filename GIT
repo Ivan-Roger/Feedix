@@ -12,23 +12,28 @@ then
 		else
 			if [ $1 = "commit" ]
 			then
-				git add *
-				git rm data/img/*_* --cached
-				git commit -m "$1"
-				git push origin master
+				if [ $# -lt 2 ]
+				then
+					echo $usage
 				else
-					if [ $1 = "pull" ]
-						then
-						git pull origin master
-						if [ -f perm.sh ]
-						then
-							bash perm.sh
-						fi
-					else
-						echo $usage
+					git add *
+					git rm data/img/*_* --cached
+					git commit -m "$1"
+					git push origin master
+				fi
+			else
+				if [ $1 = "pull" ]
+				then
+					git pull origin master
+					if [ -f perm.sh ]
+					then
+						bash perm.sh
 					fi
+				else
+					echo $usage
 				fi
 			fi
+		fi
 	else
 		echo "No git repository initialized for this directory ..."
 	fi
