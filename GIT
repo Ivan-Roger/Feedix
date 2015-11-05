@@ -14,7 +14,7 @@ then
 			then
 				if [ $# -lt 2 ]
 				then
-					echo $usage
+					echo "$usage"
 				else
 					git add *
 					git rm data/img/*_* --cached
@@ -30,7 +30,7 @@ then
 						bash perm.sh
 					fi
 				else
-					echo $usage
+					echo "$usage"
 				fi
 			fi
 		fi
@@ -38,5 +38,5 @@ then
 		echo "No git repository initialized for this directory ..."
 	fi
 else
-	echo $usage
+	echo "$usage"
 fi
