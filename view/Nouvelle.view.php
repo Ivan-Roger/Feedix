@@ -4,6 +4,7 @@
     <meta charset="utf-8"/>
     <title>Feedix - Nouvelle</title>
     <link rel="stylesheet" href="../view/style.css"/>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
   </head>
   <body>
     <header>

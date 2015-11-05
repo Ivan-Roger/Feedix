@@ -1,19 +1,39 @@
 body {
-  font-family: "Comic Sans MS","Trebuchet MS",serif;
   margin:0;
-  //background-color: #FF6347;
+    padding:0;
+
 }
 
-header nav { background-color: #800000;
+header { background-color: #0070FF;
             width:100%;
             top: 0;
             left: 0;
-            height: 100px;
             position: fixed;
+            height : 100px;
           }
 
 header h1 {
   text-align:center;
+  font-family: "Comic Sans MS","Trebuchet MS",serif;
+  font-weight:bold;
+  text-shadow:
+#0000FF 1px 1px,
+#0000FF -1px 1px,
+#0000FF -1px -1px,
+#0000FF 1px -1px;
+  font-size: 50px;
+  float: center;
+}
+
+header a {
+  color: blue;
+  text-decoration: underline;
+  border-width: 2px;
+  border-color:#0000FF;
+  border-style: dashed;
+  width:100%;
+  float: right;
+  text-align: right;
 }
 
 section {
