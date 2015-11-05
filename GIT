@@ -11,20 +11,26 @@ else
 		then
 			cp ./GIT ~/local/bin/
 			chmod u+x ~/local/bin/GIT
-		else if [ $1 = "commit" ]
-			git add *
-			git rm data/img/*_* --cached
-			git commit -m "$1"
-			git push origin master
-		else if [ $1 = "pull" ]
-			git pull origin master
-			if [ -f perm.sh ]
-			then
-				bahs perm.sh
-			fi
 		else
-			echo $usage
-		fi
+			if [ $1 = "commit" ]
+			then
+				git add *
+				git rm data/img/*_* --cached
+				git commit -m "$1"
+				git push origin master
+				else
+					if [ $1 = "pull" ]
+						then
+						git pull origin master
+						if [ -f perm.sh ]
+						then
+							bash perm.sh
+						fi
+					else
+						echo $usage
+					fi
+				fi
+			fi
 	else
 		echo "No git repository initialized for this directory ..."
 	fi
