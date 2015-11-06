@@ -25,7 +25,18 @@
   if (isset($_SESSION['user'])) {
     $data['followedRSS'] = array();
     $data['user']=$_SESSION['user'];
-    foreach ($dao->readAbonnement($data['user']) as $abo) {
+    if (isset($_GET['sort']) && $_GET['sort']=="date") {  // Abonnements, triées par date
+      foreach ($dao->readRSSAbonnementTrieDate($data['user']) as $rss) {
+        $list[]=$dao->readAbonnementByID($_SESSION['user'],$rss['idRSS']);
+      }
+    } else if (isset($_GET['sort']) && $_GET['sort']=="categorie" && isset($_GET['cat'])) { // Abonnements, de la categorie cat
+      $list = $dao->readAbonnementTrieCategorie($data['user'],1,20,$_GET['cat']);
+    } else if (isset($_GET['sort']) && $_GET['sort']=="categorie") { // Abonnements, triées par categorie
+      $list = $dao->readAbonnementTrieCategorie($data['user']);
+    } else {    // Abonnements
+      $list = $dao->readAbonnement($data['user']);
+    }
+    foreach ($list as $abo) {
       $rss=$dao->readRSSByID($abo['idRSS']);
       $info['id'] = $rss->id();
       $info['titre'] = $rss->titre();

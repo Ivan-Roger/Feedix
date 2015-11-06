@@ -42,7 +42,7 @@
 
     // Lis $limit flux RSS a partir de $id
     function readRSS($first,$limit) {
-      $sql = "Select * from RSS where id >= ? limit ?";
+      $sql = "SELECT * from RSS where id >= ? limit ?";
       $req = $this->db->prepare($sql);
       $res = $req->execute(array($first,$limit));
       if ($res === FALSE) {
@@ -136,6 +136,22 @@
     // Methodes CRUD sur Nouvelle
     //////////////////////////////////////////////////////////
 
+    function getIdMaxNouvelle($idRSS) {
+      $sql = "SELECT MAX(id) as max FROM Nouvelle WHERE idRSS = ?";
+      $req = $this->db->prepare($sql);
+      $params = array($idRSS);
+      $res = $req->execute($params);
+      debug($this->db,$sql,$params);
+      if ($res === FALSE) {
+        die("readNouvelle error: no Nouvelle finded\n");
+      }
+      $res = $req->fetchAll();
+      if (isset($res[0]))
+        return $res[0]['max'];
+      else
+        return 0;
+    }
+
     // Lis $limit flux Nouvelles a partir de $id
     function readNouvelles($first,$RSS_id,$limit) {
       $sql = "SELECT * FROM Nouvelle WHERE id > ? AND idRSS = ? ORDER BY idRSS, id LIMIT ?";
@@ -157,12 +173,11 @@
       if ($req === FALSE) {
         die("getNouvelleByTitle error: no nouvelle inserted\n");
       }
-      else {
-        $rows = $req->fetchAll(PDO::FETCH_CLASS, "Nouvelle",array($RSS_id));
-        if (count($rows)>0) {
-          return $rows[0];
-        }
-      }
+      $res = $req->fetchAll(PDO::FETCH_CLASS, "Nouvelle",array($RSS_id));
+      if (isset($res[0]))
+        return $res[0];
+      else
+        return null;
     }
 
     // Acces à une nouvelle à partir de son ID et l'ID du flux
@@ -178,9 +193,11 @@
       if ($req === FALSE) {
         die("readNouvelleByID error: no nouvelle found\n");
       }
-      else {
-        return $req->fetchAll(PDO::FETCH_CLASS, "Nouvelle",array($RSS_id))[0];
-      }
+      $res=$req->fetchAll(PDO::FETCH_CLASS, "Nouvelle",array($RSS_id));
+      if (isset($res[0]))
+        return $res[0];
+      else
+        return null;
     }
 
     // Crée une nouvelle dans la base à partir d'un objet nouvelle
@@ -210,11 +227,12 @@
     // Met à jour la nouvelle dans la base
     function updateNouvelle(Nouvelle $n) {
       try {
-        $sql = "SELECT COUNT(*) AS nb FROM Nouvelle WHERE id=? AND idRSS = ?";
+        $sql = "SELECT COUNT(*) AS nb FROM Nouvelle WHERE ( id=? AND idRSS = ? ) OR titre = ?";
         $req = $this->db->prepare($sql);
         $params = array(
           $n->id(),
-          $n->idRSS()
+          $n->idRSS(),
+          $n->titre()
         );
         debug($this->db,$sql,$params);
         $res = $req->execute($params);
@@ -257,6 +275,49 @@
       debug($this->db,$sql,$params);
       if ($res === FALSE) {
         die("readAbonnement error: requête impossible\n");
+      }
+      return $req->fetchAll();
+    }
+
+    function readAbonnementByID($login,$id) {
+      $sql = "SELECT * FROM Abonnement WHERE userLogin = ? AND idRSS = ?";
+      $req = $this->db->prepare($sql);
+      $params = array($login,$id);
+      $res = $req->execute($params);
+      debug($this->db,$sql,$params);
+      if ($res === FALSE) {
+        die("readAbonnement error: requête impossible\n");
+      }
+      $res=$req->fetchAll();
+      if (isset($res[0]))
+        return $res[0];
+      else
+        return null;
+    }
+
+    function readAbonnementTrieCategorie($login,$first=1,$limit=20,$cat=null) {
+      $sql = "SELECT * FROM Abonnement WHERE userLogin = ? AND idRSS >= ? ".($cat!=null?"AND categorie = ? ":"")."ORDER BY categorie LIMIT ?";
+      $req = $this->db->prepare($sql);
+      $params = array($login,$first);
+      if ($cat!=null)
+        $params[]=$cat;
+      $params[]=$limit;
+      $res = $req->execute($params);
+      debug($this->db,$sql,$params);
+      if ($res === FALSE) {
+        die("readAbonnementTrieCategorie error: requête impossible\n");
+      }
+      return $req->fetchAll();
+    }
+
+    function readRSSAbonnementTrieDate($login,$first=1,$limit=20) {
+      $sql = "SELECT id as idRSS FROM RSS WHERE id IN ( SELECT idRSS FROM Abonnement WHERE userLogin = ? ) AND id >= ? ORDER BY `date` DESC LIMIT ?";
+      $req = $this->db->prepare($sql);
+      $params = array($login,$first,$limit);
+      $res = $req->execute($params);
+      debug($this->db,$sql,$params);
+      if ($res === FALSE) {
+        die("readRSSAbonnementTrieDate error: requête impossible\n");
       }
       return $req->fetchAll();
     }
