@@ -7,37 +7,37 @@
     <link href="../data/css/bootstrap.css" rel="stylesheet">
   </head>
   <style type="text/css">
-     [class*="col"] { margin-bottom: 20px; }
-     body { margin-top: 10px;
-            margin:0
-            padding:0;
-          }
+    [class*="col"] { margin-bottom: 20px; }
+    body {
+      margin-top: 10px;
+      margin:0
+      padding:0;
+    }
 
-      header {
-        background-color: #00C0F0;
-      }
-      header h1 {
-        color: white;
-        text-align: center;
-        font-weight:bold;
-        text-shadow:
-      #000000 1px 1px,
-      #000000 -1px 1px,
-      #000000 -1px -1px,
-      #000000 1px -1px;
-        font-size: 70px;
-      }
-      footer p {
-        text-align: center;
-      }
+    header {
+      background-color: #00C0F0;
+    }
+    header h1 {
+      color: white;
+      text-align: center;
+      font-weight:bold;
+      text-shadow:
+        #000000 1px 1px,
+        #000000 -1px 1px,
+        #000000 -1px -1px,
+        #000000 1px -1px;
+      font-size: 70px;
+    }
+    footer p {
+      text-align: center;
+    }
   </style>
   <body>
-
     <header class="page-header">
       <h1>Feedix - Flux</h1>
         <nav class="navbar">
           <div class="col-lg-4">
-            <a class="btn btn-primary btn-lg active" disabled="disabled" href="..">Home</a>
+            <a class="btn btn-primary btn-lg <?php if (!isset($_GET['sort'])) { ?>active" disabled="disabled<?php } ?>" href="..">Home</a>
           </div>
           <div class="col-lg-4 col-lg-offset-4 text-right">
             <?php if (isset($data['user'])) { ?>
@@ -51,14 +51,28 @@
     <?php if (isset($data['user'])) { ?>
     <section class="col-lg-12">
       <?php if(isset($data['info'])) echo("<p class='alert alert-success'>".$data['info']."</p>\n"); ?>
-      <h2>Abonnements</h2>
+      <h2 class="col-lg-6">Abonnements</h2>
+      <div class="col-lg-5 col-lg-offset-1">
+        <div class="navbar navbar-right">
+          <br/>
+          <div class="btn-group">
+            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Trier <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="afficherFlux.ctrl.php?sort=date">Trier par Date</a></li>
+              <li><a href="afficherFlux.ctrl.php?sort=categorie">Trier par Categorie</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
       <hr/>
       <?php if (count($data["followedRSS"])>0) { foreach ($data["followedRSS"] as $flux) { ?>
         <article class="col-lg-6">
           <h3><?= $flux['nom'] ?> <small><?= $flux["titre"] ?></small></h3>
           <i class="col-lg-6"><a href="<?= $flux['url'] ?>"><?= $flux['url'] ?></a></i>
           <em class="col-lg-6"><?= $flux['date'] ?></em><br/>
-          <p class="col-lg-2"><span class="glyphicon glyphicon-tag"></span> <?= $flux['categorie'] ?></p>
+          <div class="col-lg-2">
+            <a href="afficherFlux.ctrl.php?sort=categorie&cat=<?= $flux['categorie'] ?>"><span class="glyphicon glyphicon-tag"></span> <?= $flux['categorie'] ?></a>
+          </div>
           <div class="col-lg-6"><div class="navbar-right">
             <a class="btn btn-info" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>">Lire ...</a>
             <a class="btn btn-warning" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>&update=1">Mettre à jour</a>
@@ -72,7 +86,7 @@
     <?php } ?>
     <section class="col-lg-12">
       <?php if (isset($data['user'])) { ?>
-      <h2>Flux par défaut</h2>
+      <h2 class="col-lg-12">Flux par défaut</h2>
       <hr/>
       <?php } ?>
       <?php foreach ($data["defaultRSS"] as $flux) {?>
@@ -84,7 +98,8 @@
             <a class="btn btn-info" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>">Lire ...</a>
             <a class="btn btn-warning" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>&update=1">Mettre à jour</a>
             <?php if (isset($data['user'])) { ?>
-            <a class="btn btn-success" href="sAbonner.ctrl.php?action=follow&rss=<?= $flux['id'] ?>">S'abonner</a>
+              <?php if ($flux['follow']) { ?><a class="btn btn-success" href="sAbonner.ctrl.php?action=select&rss=<?= $flux['id'] ?>">S'abonner</a><?php } else { ?>
+              <a class="btn btn-danger" href="sAbonner.ctrl.php?action=unfollow&rss=<?= $flux['id'] ?>">Se désabonner</a><?php } ?>
             <?php } ?>
           </div></div>
         </article>

@@ -1,6 +1,6 @@
 <?php
-
   require_once('Nouvelle.class.php');
+  require_once('DAO.class.php');
 
   class RSS {
     private $url;
@@ -51,7 +51,8 @@
       $this->titre = $nodeList->item(0)->textContent;
 
       $this->news=NULL;
-      $idNouv=1;
+      $dao = new DAO("../data/db/rss.db");
+      $idNouv=$dao->getIdMaxNouvelle($this->id)+1;
       $nodeList = $doc->getElementsByTagName('item');
       for ($i=0; $i<$nodeList->length; $i++) {
         $n = new Nouvelle($this->id,$idNouv,$nodeList->item($i));
