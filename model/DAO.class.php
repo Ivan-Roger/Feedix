@@ -250,7 +250,7 @@
     //////////////////////////////////////////////////////////
 
     function readAbonnement($login,$first=1,$limit=20) {
-      $sql = "SELECT idRSS FROM Abonnement WHERE userLogin = ? AND idRSS >= ? ORDER BY idRSS LIMIT ?";
+      $sql = "SELECT * FROM Abonnement WHERE userLogin = ? AND idRSS >= ? ORDER BY idRSS LIMIT ?";
       $req = $this->db->prepare($sql);
       $params = array($login,$first,$limit);
       $res = $req->execute($params);

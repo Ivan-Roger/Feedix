@@ -35,7 +35,7 @@
     <header class="page-header">
       <h1>Feedix - Connexion</h1>
       <nav class="navbar">
-        <div class="col-lg-4 col-lg-offset-8">
+        <div class="col-lg-6">
           <a class="btn btn-primary btn-lg" href="..">Home</a>
         </div>
       </nav>

@@ -18,17 +18,21 @@
     $info['id'] = $rss->id();
     $info['titre'] = $rss->titre();
     $info['url'] = $rss->url();
+    $info['date'] = $rss->date();
     $data['defaultRSS'][] = $info;
   }
 
   if (isset($_SESSION['user'])) {
     $data['followedRSS'] = array();
     $data['user']=$_SESSION['user'];
-    foreach ($dao->readAbonnement($data['user']) as $idAbo) {
-      $rss=$dao->readRSSByID($idAbo['idRSS']);
+    foreach ($dao->readAbonnement($data['user']) as $abo) {
+      $rss=$dao->readRSSByID($abo['idRSS']);
       $info['id'] = $rss->id();
       $info['titre'] = $rss->titre();
+      $info['nom'] = $abo['nom'];
       $info['url'] = $rss->url();
+      $info['date'] = $rss->date();
+      $info['categorie'] = $abo['categorie'];
       $data['followedRSS'][] = $info;
     }
   }

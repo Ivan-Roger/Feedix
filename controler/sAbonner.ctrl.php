@@ -8,8 +8,8 @@
   else {
     $dao = new DAO("../data/db/rss.db");
     $data['user']=$_SESSION['user'];
-    if (isset($_GET['action']) && $_GET['action']=="follow" && isset($_GET['rss'])) {
-      $dao->addAbonnement($_SESSION['user'],$_GET['rss']);
+    if (isset($_POST['action']) && $_POST['action']=="follow" && isset($_POST['rss'])) {
+      $dao->addAbonnement($_SESSION['user'],$_POST['rss'],$_POST['nom'],$_POST['categorie']);
       header("Location:"."..");
     }
     if (isset($_GET['action']) && $_GET['action']=="unfollow" && isset($_GET['rss'])) {

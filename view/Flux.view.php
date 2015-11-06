@@ -37,7 +37,7 @@
       <h1>Feedix - Flux</h1>
         <nav class="navbar">
           <div class="col-lg-4">
-            <a class="btn btn-primary btn-lg active" href="..">Home</a>
+            <a class="btn btn-primary btn-lg active" disabled="disabled" href="..">Home</a>
           </div>
           <div class="col-lg-4 col-lg-offset-4 text-right">
             <?php if (isset($data['user'])) { ?>
@@ -50,12 +50,16 @@
     </header>
     <?php if (isset($data['user'])) { ?>
     <section class="col-lg-12">
+      <?php if(isset($data['info'])) echo("<p class='alert alert-success'>".$data['info']."</p>\n"); ?>
       <h2>Abonnements</h2>
+      <hr/>
       <?php if (count($data["followedRSS"])>0) { foreach ($data["followedRSS"] as $flux) { ?>
         <article class="col-lg-6">
-          <h3><?= $flux["titre"] ?></h3>
-          <i class="col-lg-12"><a href="<?= $flux['url'] ?>"><?= $flux['url'] ?></a></i><br/>
-          <div class="col-lg-5 col-lg-offset-2"><div class="text-right">
+          <h3><?= $flux['nom'] ?> <small><?= $flux["titre"] ?></small></h3>
+          <i class="col-lg-6"><a href="<?= $flux['url'] ?>"><?= $flux['url'] ?></a></i>
+          <em class="col-lg-6"><?= $flux['date'] ?></em><br/>
+          <p class="col-lg-2"><span class="glyphicon glyphicon-tag"></span> <?= $flux['categorie'] ?></p>
+          <div class="col-lg-6"><div class="navbar-right">
             <a class="btn btn-info" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>">Lire ...</a>
             <a class="btn btn-warning" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>&update=1">Mettre à jour</a>
             <a class="btn btn-danger" href="sAbonner.ctrl.php?action=unfollow&rss=<?= $flux['id'] ?>">Se désabonner</a>
@@ -69,30 +73,35 @@
     <section class="col-lg-12">
       <?php if (isset($data['user'])) { ?>
       <h2>Flux par défaut</h2>
+      <hr/>
       <?php } ?>
       <?php foreach ($data["defaultRSS"] as $flux) {?>
         <article class="col-lg-6">
           <h3><?= $flux["titre"] ?></h3>
-          <i class="col-lg-12"><a href="<?= $flux['url'] ?>"><?= $flux['url'] ?></a></i>
-          <div class="col-lg-5 col-lg-offset-2"><div class="text-right">
+          <i class="col-lg-6"><a href="<?= $flux['url'] ?>"><?= $flux['url'] ?></a></i>
+          <em class="col-lg-6"><?= $flux['date'] ?></em>
+          <div class="col-lg-6 col-lg-offset-2"><div class="navbar-right">
             <a class="btn btn-info" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>">Lire ...</a>
             <a class="btn btn-warning" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>&update=1">Mettre à jour</a>
             <?php if (isset($data['user'])) { ?>
             <a class="btn btn-success" href="sAbonner.ctrl.php?action=follow&rss=<?= $flux['id'] ?>">S'abonner</a>
             <?php } ?>
-          </b>
+          </div></div>
         </article>
       <?php } ?>
     </section>
     <?php if (isset($data['user'])) { ?>
       <section class="col-lg-12">
-        <?php if(isset($data['info'])) echo("<p class='alert alert-success'>".$data['info']."</p>\n"); ?>
         <form class="col-lg-6" action="afficherFlux.ctrl.php" method="POST">
           <fieldset>
             <legend>Ajouter un flux</legend>
             <input type="hidden" name="action" value="addRSS"/>
-            <input name="url" type="text" placeholder="URL"/>
-            <input type="submit" value="Ajouter"/>
+            <div class="col-lg-4 input-group">
+              <input class="form-control" name="url" type="text" placeholder="URL"/>
+              <div class="input-group-btn">
+                <input class="btn btn-info" type="submit" value="Ajouter"/>
+              </div>
+            </div>
           </fieldset>
         </form>
         <fieldset class="col-lg-6">
