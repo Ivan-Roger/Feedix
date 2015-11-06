@@ -98,7 +98,8 @@
             <a class="btn btn-info" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>">Lire ...</a>
             <a class="btn btn-warning" href="afficherNouvelles.ctrl.php?rss=<?= $flux['id'] ?>&update=1">Mettre à jour</a>
             <?php if (isset($data['user'])) { ?>
-            <a class="btn btn-success" href="sAbonner.ctrl.php?action=follow&rss=<?= $flux['id'] ?>">S'abonner</a>
+              <?php if ($flux['follow']) { ?><a class="btn btn-success" href="sAbonner.ctrl.php?action=select&rss=<?= $flux['id'] ?>">S'abonner</a><?php } else { ?>
+              <a class="btn btn-danger" href="sAbonner.ctrl.php?action=unfollow&rss=<?= $flux['id'] ?>">Se désabonner</a><?php } ?>
             <?php } ?>
           </div></div>
         </article>

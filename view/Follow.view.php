@@ -56,7 +56,7 @@
           <input type="hidden" id="rss_<?= $rss['id'] ?>_titre" value="<?= $rss['titre'] ?>"/>
           <input type="hidden" id="rss_<?= $rss['id'] ?>_url" value="<?= $rss['url'] ?>"/>
           <div class="col-lg-5 col-lg-offset-2"><div class="text-right">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#subscribeModal" onClick="setFormValues(<?= $rss['id'] ?>);">
+            <button id="rss_<?= $rss['id'] ?>_btn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#subscribeModal" onClick="setFormValues(<?= $rss['id'] ?>);">
               S'abonner
             </button>
           </div></div>
@@ -110,6 +110,10 @@
         $('#subscribeModal_URL').html(url);
         console.log("url = "+url);
       }
+
+      <?php if (isset($data['select'])) { ?>
+      $("#rss_<?= $data['select'] ?>_btn").click();
+      <?php } ?>
     </script>
   </body>
 </html>

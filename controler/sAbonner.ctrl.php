@@ -22,6 +22,9 @@
       $r['url']=$rss->url();
       $data['flux'][]=$r;
     }
+    if (isset($_GET['action']) && $_GET['action']=="select" && isset($_GET['rss'])) {
+      $data['select']=$_GET['rss'];
+    }
 
     include("../view/Follow.view.php");
   }

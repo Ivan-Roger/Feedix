@@ -19,6 +19,8 @@
     $info['titre'] = $rss->titre();
     $info['url'] = $rss->url();
     $info['date'] = $rss->date();
+    if (isset($_SESSION['user']))
+      $info['follow']=$dao->readAbonnementByID($_SESSION['user'],$i)==null;
     $data['defaultRSS'][] = $info;
   }
 
