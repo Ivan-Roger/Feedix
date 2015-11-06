@@ -84,6 +84,9 @@
       <?php } ?>
     </section>
     <?php } ?>
+    <?php if (!isset($data['user'])) { ?>
+      <blockquote class="col-lg-8 col-lg-offset-2">Bienvenue sur Feedix. Vous pouvez consulter les differents flux par défaut ci-dessous, ou encore vous Connecter/Créer un compte. Avec ce compte vous pourrez vous abonner aux differents flux du site afin de rester au courant des dernières nouvelles. Pour plus d'informations lisez <a href="../Lisez_moi"> la documentation</a>.</blockquote>
+    <?php } ?>
     <section class="col-lg-12">
       <?php if (isset($data['user'])) { ?>
       <h2 class="col-lg-12">Flux par défaut</h2>
@@ -106,21 +109,29 @@
       <?php } ?>
     </section>
     <?php if (isset($data['user'])) { ?>
-      <section class="col-lg-12">
-        <form class="col-lg-6" action="afficherFlux.ctrl.php" method="POST">
+        <form class="form-horizontal col-lg-6" action="afficherFlux.ctrl.php" method="POST">
           <fieldset>
             <legend>Ajouter un flux</legend>
             <input type="hidden" name="action" value="addRSS"/>
-            <div class="col-lg-4 input-group">
-              <input class="form-control" name="url" type="text" placeholder="URL"/>
-              <div class="input-group-btn">
-                <input class="btn btn-info" type="submit" value="Ajouter"/>
-              </div>
+            <div class="form-group">
+              <label class="col-lg-2 control-label" for="addForm_URL">URL</label>
+              <div class="col-lg-6"><input required class="form-control" type="text" name="url" id="addForm_URL"/></div>
             </div>
+            <div class="form-group">
+              <label class="col-lg-2 control-label" for="addForm_Nom">Nom</label>
+              <div class="col-lg-6"><input required class="form-control" type="text" name="nom" id="addForm_Nom"/></div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-2 control-label" for="addForm_Categorie">Categorie</label>
+              <div class="col-lg-6"><input required class="form-control" type="text" name="categorie" id="addForm_Categorie"/></div>
+            </div>
+            <input class="col-lg-2 col-lg-offset-2 btn btn-info" type="submit" value="Ajouter le flux"/>
+            <small class="col-lg-10 col-lg-offset-1">En ajoutant le flux vous vous y abonnez automatiquement.</small>
           </fieldset>
         </form>
         <fieldset class="col-lg-6">
           <legend>S'abonner</legend>
+          <blockquote class="col-lg-12">Pour garder un flux en avant et pouvoir toujours rester au courant des dernières nouvelles abonnez vous. En cliquant sur le bouton ci-dessous vous pouvez acceder a la liste de tous les flux disponibles sur le site. Si le flux que vous cherchez n'est pas présent ajoutez le à gauche.</blockquote>
           <a class="btn btn-info" href="sAbonner.ctrl.php">Chercher un flux</a>
         </fieldset>
       </section>

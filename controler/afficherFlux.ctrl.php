@@ -10,6 +10,7 @@
     $rss=$dao->readRSSByURL($_POST['url']);
     $rss->update();
     $dao->updateRSS($rss);
+    $dao->addAbonnement($_SESSION['user'],$rss->id(),$_POST['nom'],$_POST['categorie']);
     $data['info']="Flux ajouté !";
   }
 

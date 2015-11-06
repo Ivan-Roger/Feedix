@@ -78,11 +78,11 @@
               <h2><span id="subscribeModal_Titre"></span><br/><small id="subscribeModal_URL"></small></h2>
               <div class="form-group">
                 <label class="col-lg-2 control-label" for="subscribeModalForm_Nom">Nom</label>
-                <div class="col-lg-6"><input class="form-control" type="text" name="nom" id="subscribeModalForm_Nom"/></div>
+                <div class="col-lg-6"><input required class="form-control" type="text" name="nom" id="subscribeModalForm_Nom"/></div>
               </div>
               <div class="form-group">
                 <label class="col-lg-2 control-label" for="subscribeModalForm_Categorie">Categorie</label>
-                <div class="col-lg-6"><input class="form-control" type="text" name="categorie" id="subscribeModalForm_Categorie"/></div>
+                <div class="col-lg-6"><input required class="form-control" type="text" name="categorie" id="subscribeModalForm_Categorie"/></div>
               </div>
               <input class="col-lg-offset-3 btn btn-success" type="submit" value="S'abonner"/>
             </form>
