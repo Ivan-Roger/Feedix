@@ -37,13 +37,13 @@
       <h1>Feedix - Flux</h1>
         <nav class="navbar">
           <div class="col-lg-4">
-            <a class="btn btn-primary btn-lg <?php if (!isset($_GET['sort'])) { ?>active" disabled="disabled<?php } ?>" href="..">Home</a>
+            <a class="btn btn-primary btn-lg <?php if (!isset($_GET['sort'])) { ?>active" disabled="disabled<?php } ?>" href=".."><span class="glyphicon glyphicon-home"></span> Home</a>
           </div>
           <div class="col-lg-4 col-lg-offset-4 text-right">
             <?php if (isset($data['user'])) { ?>
-              <a class="btn btn-danger btn-lg" href="afficherFlux.ctrl.php?action=signOut">Déconnexion (<?= $data['user'] ?>)</a>
+              <a class="btn btn-danger btn-lg" href="afficherFlux.ctrl.php?action=signOut"><span class="glyphicon glyphicon-log-out"></span> Déconnexion (<?= $data['user'] ?>)</a>
             <?php } else { ?>
-              <a class="btn btn-primary btn-lg" href="seConnecter.ctrl.php" >Connexion / Créer un compte</a>
+              <a class="btn btn-primary btn-lg" href="seConnecter.ctrl.php" ><span class="glyphicon glyphicon-log-in"></span> Connexion / Créer un compte</a>
             <?php } ?>
           </div>
         </nav>
@@ -58,6 +58,7 @@
           <div class="btn-group">
             <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Trier <span class="caret"></span></a>
             <ul class="dropdown-menu">
+              <li><a href="afficherFlux.ctrl.php">Annuler le tri</a></li>
               <li><a href="afficherFlux.ctrl.php?sort=date">Trier par Date</a></li>
               <li><a href="afficherFlux.ctrl.php?sort=categorie">Trier par Categorie</a></li>
             </ul>
@@ -65,7 +66,8 @@
         </div>
       </div>
       <hr/>
-      <?php if (count($data["followedRSS"])>0) { foreach ($data["followedRSS"] as $flux) { ?>
+      <?php if (count($data["followedRSS"])>0) { $i=0; foreach ($data["followedRSS"] as $flux) { ?>
+        <?php if ($i==0) {?><div class="row"><?php } ?>
         <article class="col-lg-6">
           <h3><?= $flux['nom'] ?> <small><?= $flux["titre"] ?></small></h3>
           <i class="col-lg-6"><a href="<?= $flux['url'] ?>"><?= $flux['url'] ?></a></i>
@@ -79,9 +81,16 @@
             <a class="btn btn-danger" href="sAbonner.ctrl.php?action=unfollow&rss=<?= $flux['id'] ?>">Se désabonner</a>
           </div></div>
         </article>
+        <?php if ($i==1) {?></div><?php } else $i++; ?>
       <?php } } else { ?>
         <p>Vous n'êtes abonné à aucun flux.</p>
       <?php } ?>
+      <nav class="col-lg-12">
+        <ul class="pager">
+          <li class="previous <?php if (!$data['page'][0]) { ?> disabled"><a href="#<?php } else { ?>"><a href="afficherFlux.ctrl.php?page=<?= $data['page'][0] ?><?= $data['linkFlags'] ?><?php } ?>"><span aria-hidden="true">&larr;</span> Plus récent</a></li>
+          <li class="next <?php if (!$data['page'][1]) { ?> disabled"><a href="#<?php } else { ?>"><a href="afficherFlux.ctrl.php?page=<?= $data['page'][1] ?><?= $data['linkFlags'] ?><?php } ?>">Plus vieux <span aria-hidden="true">&rarr;</span></a></li>
+        </ul>
+      </nav>
     </section>
     <?php } ?>
     <?php if (!isset($data['user'])) { ?>

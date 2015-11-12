@@ -52,7 +52,7 @@
 
       $this->news=NULL;
       $dao = new DAO("../data/db/rss.db");
-      $idNouv=$dao->getIdMaxNouvelle($this->id)+1;
+      $idNouv=1;
       $nodeList = $doc->getElementsByTagName('item');
       for ($i=0; $i<$nodeList->length; $i++) {
         $n = new Nouvelle($this->id,$idNouv,$nodeList->item($i));

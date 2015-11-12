@@ -8,25 +8,30 @@
     $data['user']=$_SESSION['user'];
   if (isset($_GET['rss']) && $_GET['rss']!=null) {
     $dao = new DAO("../data/db/rss.db");
+
+    $page = (isset($_GET['page'])?$_GET['page']:1);
+    $nbPages = $dao->getNbNouvelles($_GET['rss'])/20;
+    $data['page'][0] = ($page>1?$page-1:false); // prev
+    $data['page'][1] = ($page<$nbPages?$page+1:false); // next
+    $start = 1+($page-1)*20;
+
     $rss = $dao->readRSSByID($_GET['rss']);
     $news=null;
     if (isset($_GET['update']) && $_GET['update']==1) {
       $rss->update();
       $dao->updateRSS($rss);
-      $news = $rss->news();
-      foreach ($news as $nouv) {
+      foreach ($rss->news() as $nouv) {
         $dao->updateNouvelle($nouv);
       }
-    } else {
-      $news=$dao->readNouvelles(0,$_GET['rss'],20);
     }
+    $news=$dao->readNouvelles($start,$_GET['rss'],20);
     $data['news'] = array();
     $data[0] = 1;
     $data['flux']['titre'] = $dao->readRSSByID($_GET['rss'])->titre();
+    $data['idRSS'] = $_GET['rss'];
     if ($news!=null) {
       foreach ($news as $nouv) {
         $n['id'] = $nouv->id();
-        $n['idRSS'] = $nouv->idRSS();
         $n['title'] = $nouv->titre();
         $n['date'] = $nouv->date();
         $n['img'] = $nouv->imageURL();

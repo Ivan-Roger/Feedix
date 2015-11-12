@@ -36,7 +36,7 @@
       <h1>Feedix - Connexion</h1>
       <nav class="navbar">
         <div class="col-lg-6">
-          <a class="btn btn-primary btn-lg" href="..">Home</a>
+          <a class="btn btn-primary btn-lg" href=".."><span class="glyphicon glyphicon-home"></span> Home</a>
         </div>
       </nav>
     </header>

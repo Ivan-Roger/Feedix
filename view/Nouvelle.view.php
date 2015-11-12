@@ -50,14 +50,14 @@
       <h1>Feedix - Nouvelle<br/><small><?= $data['flux']['titre'] ?></small></h1>
       <nav class="navbar">
         <div class="col-lg-6">
-          <a class="btn btn-primary btn-lg" href="..">Home</a>
-          <a class="btn btn-primary btn-lg" href="afficherNouvelles.ctrl.php?rss=<?= $data['idRSS'] ?>">Retour</a>
+          <a class="btn btn-primary btn-lg" href=".."><span class="glyphicon glyphicon-home"></span> Home</a>
+          <a class="btn btn-primary btn-lg" href="afficherNouvelles.ctrl.php?rss=<?= $data['idRSS'] ?>"><span class="glyphicon glyphicon-circle-arrow-left"></span> Retour</a>
         </div>
         <div class="col-lg-2 col-lg-offset-4 text-right">
           <?php if (isset($data['user'])) { ?>
-            <a class="btn btn-danger btn-lg" href="afficherFlux.ctrl.php?action=signOut">Déconnexion (<?= $data['user'] ?>)</a>
+            <a class="btn btn-danger btn-lg" href="afficherFlux.ctrl.php?action=signOut"><span class="glyphicon glyphicon-log-out"></span> Déconnexion (<?= $data['user'] ?>)</a>
           <?php } else { ?>
-            <a class="btn btn-primary btn-lg" href="seConnecter.ctrl.php" >Connexion / Créer un compte</a>
+            <a class="btn btn-primary btn-lg" href="seConnecter.ctrl.php" ><span class="glyphicon glyphicon-log-in"></span> Connexion / Créer un compte</a>
           <?php } ?>
         </div>
       </nav>
