@@ -62,7 +62,7 @@
       </nav>
     </header>
     <div class="container">
-      <section class="col-lg-12">
+      <section class="col-lg-9">
         <?php $i=1; if (count($data["news"])>0) { foreach ($data["news"] as $nouvelle) {?>
           <?php if ($i==1) { ?>
           <div class="row">
@@ -98,6 +98,13 @@
           </ul>
         </nav>
       </section>
+      <aside class="col-lg-3">
+        <p style="text-align:justify;">
+        <?php foreach($data['words'] as $word) { ?>
+          <span style='font-size:<?php echo(($word['count']*4)+10); ?>px'><?= $word['word'] ?></span>
+        <?php } ?>
+        </p>
+      </aside>
     </div>
     <footer class="col-lg-12">
       <hr/>

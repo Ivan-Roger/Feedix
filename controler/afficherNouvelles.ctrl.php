@@ -32,6 +32,8 @@
     $data[0] = 1;
     $data['flux']['titre'] = $dao->readRSSByID($_GET['rss'])->titre();
     $data['idRSS'] = $_GET['rss'];
+    $data['words'] = $dao->readWords($_GET['rss']);
+    shuffle($data['words']);
     if ($news!=null) {
       foreach ($news as $nouv) {
         $n['id'] = $nouv->id();
@@ -41,8 +43,6 @@
         $n['desc'] = $nouv->description();
         $data['news'][]=$n;
       }
-    } else {
-      //echo("--- Debug: Pas de nouvelles\n");
     }
     include("../view/Nouvelles.view.php");
   } else {

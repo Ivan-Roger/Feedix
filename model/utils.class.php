@@ -9,7 +9,7 @@
     //preg_match_all('#<[^>]+>(.*)</[^>]+>#im',$text,$match_arr,PREG_PATTERN_ORDER);
     //var_dump($match_arr);
 
-    preg_match_all('/([a-zA-Z]|\xC3[\x80-\x96\x98-\xB6\xB8-\xBF]|\xC5[\x92\x93\xA0\xA1\xB8\xBD\xBE]){4,}/', $text, $match_arr);
+    preg_match_all('/([a-zA-Z]|\xC3[\x80-\x96\x98-\xB6\xB8-\xBF]|\xC5[\x92\x93\xA0\xA1\xB8\xBD\xBE]){4,}/', strip_tags($text), $match_arr);
     $words = $match_arr[0];
     //var_dump($words);
     $res = array();
@@ -19,6 +19,7 @@
       else
         $res[$word] = 1;
     }
+    // degager les mots de l'html :
     asort($res);
     $res = array_reverse($res);
     $res = array_splice($res,0,5);

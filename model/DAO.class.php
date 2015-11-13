@@ -300,7 +300,7 @@
     // Methodes CRUD sur Word
     //////////////////////////////////////////////////////////
 
-    function readWords($idRSS,$limit=50) {
+    function readWords($idRSS,$limit=30) {
       $sql = "SELECT * FROM Word WHERE idRSS = ? ORDER BY count DESC LIMIT ?";
       $req = $this->db->prepare($sql);
       $params = array($idRSS,$limit);
@@ -329,15 +329,13 @@
     }
 
     function createWord($idRSS,$word,$count) {
-      if ($word!="http" && $word!="href" && $word!="korben" && $word!="info" && $word!="nofollow") {
-        $sql = "INSERT INTO Word(idRSS,word,count) VALUES (?,?,?)";
-        $req = $this->db->prepare($sql);
-        $params = array($idRSS,$word,$count);
-        $res = $req->execute($params);
-        debug($this->db,$sql,$params);
-        if ($res === FALSE) {
-          die("createWord error: requête impossible\n");
-        }
+      $sql = "INSERT INTO Word(idRSS,word,count) VALUES (?,?,?)";
+      $req = $this->db->prepare($sql);
+      $params = array($idRSS,$word,$count);
+      $res = $req->execute($params);
+      debug($this->db,$sql,$params);
+      if ($res === FALSE) {
+        die("createWord error: requête impossible\n");
       }
     }
 
