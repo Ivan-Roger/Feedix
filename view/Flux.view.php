@@ -87,14 +87,14 @@
       <?php } ?>
       <nav class="col-lg-12">
         <ul class="pager">
-          <li class="previous <?php if (!$data['page'][0]) { ?> disabled"><a href="#<?php } else { ?>"><a href="afficherFlux.ctrl.php?page=<?= $data['page'][0] ?><?= $data['linkFlags'] ?><?php } ?>"><span aria-hidden="true">&larr;</span> Plus récent</a></li>
-          <li class="next <?php if (!$data['page'][1]) { ?> disabled"><a href="#<?php } else { ?>"><a href="afficherFlux.ctrl.php?page=<?= $data['page'][1] ?><?= $data['linkFlags'] ?><?php } ?>">Plus vieux <span aria-hidden="true">&rarr;</span></a></li>
+          <li class="previous <?php if (!$data['page'][0]) { ?> disabled"><a href="#<?php } else { ?>"><a href="afficherFlux.ctrl.php?page=<?= $data['page'][0] ?><?= $data['linkFlags'] ?><?php } ?>"><span aria-hidden="true">&larr;</span> Précédent</a></li>
+          <li class="next <?php if (!$data['page'][1]) { ?> disabled"><a href="#<?php } else { ?>"><a href="afficherFlux.ctrl.php?page=<?= $data['page'][1] ?><?= $data['linkFlags'] ?><?php } ?>">Suivant <span aria-hidden="true">&rarr;</span></a></li>
         </ul>
       </nav>
     </section>
     <?php } ?>
     <?php if (!isset($data['user'])) { ?>
-      <blockquote class="col-lg-8 col-lg-offset-2">Bienvenue sur Feedix. Vous pouvez consulter les differents flux par défaut ci-dessous, ou encore vous Connecter/Créer un compte. Avec ce compte vous pourrez vous abonner aux differents flux du site afin de rester au courant des dernières nouvelles. Pour plus d'informations lisez <a href="../Lisez_moi"> la documentation</a>.</blockquote>
+      <blockquote class="col-lg-8 col-lg-offset-2">Bienvenue sur Feedix. Vous pouvez consulter les differents flux par défaut ci-dessous, ou encore vous Connecter/Créer un compte. Avec ce compte vous pourrez vous abonner aux differents flux du site afin de rester au courant des dernières nouvelles. Pour plus d'informations lisez <a href="../README.php"> la documentation</a>.</blockquote>
     <?php } ?>
     <section class="col-lg-12">
       <?php if (isset($data['user'])) { ?>

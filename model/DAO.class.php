@@ -40,6 +40,21 @@
     // Methodes CRUD sur RSS
     //////////////////////////////////////////////////////////
 
+    // Lis le nombre de flux RSS enregistrés
+    function getNbRSS() {
+      $sql = "SELECT COUNT(*) AS count FROM RSS";
+      $res = $this->db->query($sql);
+      debug($this->db,$sql,null);
+      if ($res === FALSE) {
+        die("getNbRSS error: Requête impossible !\n");
+      }
+      $res = $res->fetchAll();
+      if (isset($res[0]))
+        return $res[0]['count'];
+      else
+        return 0;
+    }
+
     // Lis $limit flux RSS a partir de $id
     function readRSS($first,$limit) {
       $sql = "SELECT * from RSS where id >= ? limit ?";

@@ -63,6 +63,12 @@
         </article>
         <?php if ($i==3) { echo("</div>"); $i=1; } else $i++; } ?>
       </section>
+      <nav class="col-lg-12">
+        <ul class="pager">
+          <li class="previous <?php if (!$data['page'][0]) { ?> disabled"><a href="#<?php } else { ?>"><a href="sAbonner.ctrl.php?page=<?= $data['page'][0] ?><?php } ?>"><span aria-hidden="true">&larr;</span> Précédent</a></li>
+          <li class="next <?php if (!$data['page'][1]) { ?> disabled"><a href="#<?php } else { ?>"><a href="sAbonner.ctrl.php?page=<?= $data['page'][1] ?><?php } ?>">Suivant <span aria-hidden="true">&rarr;</span></a></li>
+        </ul>
+      </nav>
     </div>
     <div class="modal fade" id="subscribeModal" tabindex="-1" role="dialog" aria-labelledby="subscribeModalLabel">
       <div class="modal-dialog" role="document">
