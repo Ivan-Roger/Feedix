@@ -3,6 +3,7 @@
   require_once("../model/DAO.class.php");
   require_once("../model/RSS.class.php");
   require_once("../model/Nouvelle.class.php");
+  require_once("../model/utils.class.php");
 
   if (isset($_SESSION['user']))
     $data['user']=$_SESSION['user'];
@@ -20,8 +21,10 @@
     if (isset($_GET['update']) && $_GET['update']==1) {
       $rss->update();
       $dao->updateRSS($rss);
+      $dao->deleteWords($_GET['rss']);
       foreach ($rss->news() as $nouv) {
         $dao->updateNouvelle($nouv);
+        $dao->updateWords($_GET['rss'],getWords($nouv->description()));
       }
     }
     $news=$dao->readNouvelles($start,$_GET['rss'],20);

@@ -282,6 +282,81 @@
     }
 
     //////////////////////////////////////////////////////////
+    // Methodes CRUD sur Word
+    //////////////////////////////////////////////////////////
+
+    function readWords($idRSS,$limit=50) {
+      $sql = "SELECT * FROM Word WHERE idRSS = ? ORDER BY count DESC LIMIT ?";
+      $req = $this->db->prepare($sql);
+      $params = array($idRSS,$limit);
+      $res = $req->execute($params);
+      debug($this->db,$sql,$params);
+      if ($res === FALSE) {
+        die("readWords error: requête impossible\n");
+      }
+      return $req->fetchAll();
+    }
+
+    function readWord($idRSS,$word) {
+      $sql = "SELECT * FROM Word WHERE idRSS = ? AND word = ?";
+      $req = $this->db->prepare($sql);
+      $params = array($idRSS,$word);
+      $res = $req->execute($params);
+      debug($this->db,$sql,$params);
+      if ($res === FALSE) {
+        die("readWord error: Requête impossible !\n");
+      }
+      $res = $req->fetchAll();
+      if (isset($res[0]))
+        return $res[0];
+      else
+        return null;
+    }
+
+    function createWord($idRSS,$word,$count) {
+      if ($word!="http" && $word!="href" && $word!="korben" && $word!="info" && $word!="nofollow") {
+        $sql = "INSERT INTO Word(idRSS,word,count) VALUES (?,?,?)";
+        $req = $this->db->prepare($sql);
+        $params = array($idRSS,$word,$count);
+        $res = $req->execute($params);
+        debug($this->db,$sql,$params);
+        if ($res === FALSE) {
+          die("createWord error: requête impossible\n");
+        }
+      }
+    }
+
+    function updateWords($idRSS,$words) {
+      foreach ($words as $word => $count) {
+        $w = $this->readWord($idRSS,$word);
+        if ($w==null) {
+          $this->createWord($idRSS,$word,$count);
+        } else {
+          $sql = "UPDATE Word SET count = ? AND idRSS = ? WHERE word = ?";
+          $req = $this->db->prepare($sql);
+          $params = array($count+$w['count'],$idRSS,$word);
+          debug($this->db,$sql,$params);
+          $res = $req->execute($params);
+          debug($this->db,$sql,$params);
+          if ($res === FALSE) {
+            die("updateWords error: requête impossible\n");
+          }
+        }
+      }
+    }
+
+    function deleteWords($idRSS) {
+      $sql = "DELETE FROM Word WHERE idRSS = ?";
+      $req = $this->db->prepare($sql);
+      $params = array($idRSS);
+      $res = $req->execute($params);
+      debug($this->db,$sql,$params);
+      if ($res === FALSE) {
+        die("deleteWords error: requête impossible\n");
+      }
+    }
+
+    //////////////////////////////////////////////////////////
     // Methodes CRUD sur Abonnement
     //////////////////////////////////////////////////////////
 
